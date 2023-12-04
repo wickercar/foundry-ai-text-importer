@@ -4,11 +4,11 @@
  * Eventually, this will not be for just monsters, or there will be a generalized version.
  **/
 class MonsterImporterForm extends FormApplication {
-  monsterText: string;
+  userText: string;
 
   constructor(options) {
     super(options);
-    this.monsterText = '';
+    this.userText = '';
   }
 
   static get defaultOptions() {
@@ -21,15 +21,16 @@ class MonsterImporterForm extends FormApplication {
     options.resizable = true;
     return options;
   }
+
   activateListeners(html) {
     super.activateListeners(html);
     $(html)
-      .find('#llmmi-submit')
+      .find('#llmtci-submit')
       .on('click', async (event) => {
         event.preventDefault();
-        const monsterText = $(html).find('#llmmi-userPrompt').val() as string;
-        this.monsterText = monsterText;
-        console.log('monster text submitted: ', monsterText);
+        const userText = $(html).find('#llmtci-userText').val() as string;
+        this.userText = userText;
+        console.log('monster text submitted: ', userText);
       });
   }
 
