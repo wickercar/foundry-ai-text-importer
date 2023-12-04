@@ -1,3 +1,5 @@
+import MonsterImporterForm from './ui/MonsterImporterForm';
+
 Hooks.once('init', async () => {
   console.log('llm-text-content-importer Initialized!!');
 });
@@ -17,6 +19,6 @@ Hooks.on('renderActorDirectory', () => {
       )}</button>`,
     );
   $('[data-llm-text-content-importer_start]').on('click', () => {
-    console.log('clicked actor directory button');
+    new MonsterImporterForm(MonsterImporterForm.defaultOptions).render(true);
   });
 });
