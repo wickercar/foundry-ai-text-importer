@@ -1,0 +1,44 @@
+{
+  "id": "llm-text-content-importer",
+  "title": "LLM Text Content Importer",
+  "description": "Module for importing text-block type content using an LLM",
+  "version": "1.0.0",
+  "compatibility": {
+    "minimum": 11,
+    "verified": "11.313"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "2.1.0",
+          "verified": "2.1.5"
+        }
+      }
+    ]
+  },
+  "esmodules": [
+    "module/llm-text-content-importer.js"
+  ],
+  "styles": [
+    "styles/llm-text-content-importer.css"
+  ],
+  "packs": [],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "flags": {
+    "allowBugReporter": true
+  },
+  "authors": [
+    {
+      "name": "Will Gregoire"
+    }
+  ]
+}
