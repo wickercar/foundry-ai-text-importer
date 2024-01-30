@@ -1,4 +1,4 @@
-import { genFoundry5eMonsterFromTextBlock } from '../monster-parser/warf-converters/genFoundry5eMonsterFromTextBlock';
+import { genFoundry5eMonsterFromTextBlock } from '../monster-parser/genFoundry5eMonsterFromTextBlock';
 import { importFoundry5eMonsterToFoundry } from './importMonsterToFoundry';
 
 const genFoundry5eMonsterActorFromTextBlock = async (textBlock): Promise<Actor> => {

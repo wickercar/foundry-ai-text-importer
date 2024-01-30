@@ -4,7 +4,7 @@ import { Parsed5eLLMMonster, Parsed5eLLMMonsterSchema } from '../schemas/parsed-
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { LLMChain } from 'langchain/chains';
 
-export const warfLLM5eMonsterFromText = async (text: string): Promise<Parsed5eLLMMonster> => {
+export const parse5eMonsterDataFromText = async (text: string): Promise<Parsed5eLLMMonster> => {
   const llm = OpenAILLM();
 
   const prompt = PromptTemplate.fromTemplate(`
