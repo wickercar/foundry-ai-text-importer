@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const Warf5eMonsterAbilitySchema = z.object({
+export const Parsed5eMonsterAbilitySchema = z.object({
   value: z.number(),
   proficient: z.number(),
   bonuses: z
@@ -11,15 +11,15 @@ export const Warf5eMonsterAbilitySchema = z.object({
     .describe('bonuses to checks and saves'),
 });
 
-export type Warf5eMonsterAbility = z.infer<typeof Warf5eMonsterAbilitySchema>;
+export type Parsed5eMonsterAbility = z.infer<typeof Parsed5eMonsterAbilitySchema>;
 
-export const Warf5eMonsterAbilitiesSchema = z.object({
-  str: Warf5eMonsterAbilitySchema,
-  dex: Warf5eMonsterAbilitySchema,
-  con: Warf5eMonsterAbilitySchema,
-  int: Warf5eMonsterAbilitySchema,
-  wis: Warf5eMonsterAbilitySchema,
-  cha: Warf5eMonsterAbilitySchema,
+export const Parsed5eMonsterAbilitiesSchema = z.object({
+  str: Parsed5eMonsterAbilitySchema,
+  dex: Parsed5eMonsterAbilitySchema,
+  con: Parsed5eMonsterAbilitySchema,
+  int: Parsed5eMonsterAbilitySchema,
+  wis: Parsed5eMonsterAbilitySchema,
+  cha: Parsed5eMonsterAbilitySchema,
 });
 
-export type Warf5eMonsterAbilities = z.infer<typeof Warf5eMonsterAbilitiesSchema>;
+export type Parsed5eMonsterAbilities = z.infer<typeof Parsed5eMonsterAbilitiesSchema>;

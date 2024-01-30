@@ -1,3 +1,3 @@
 import { z } from 'zod';
 
-export const Warf5eMonsterAttributesSchema = z.object({});
+export const Parsed5eMonsterAttributesSchema = z.object({});

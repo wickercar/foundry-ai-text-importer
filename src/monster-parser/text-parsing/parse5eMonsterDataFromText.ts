@@ -1,10 +1,10 @@
 import { PromptTemplate } from 'langchain/prompts';
 import OpenAILLM from '../openaillm';
-import { Warf5eLLMMonster, Warf5eLLMMonsterSchema } from '../schemas/parsed-input-data/monster/Warf5eMonster';
+import { Parsed5eLLMMonster, Parsed5eLLMMonsterSchema } from '../schemas/parsed-input-data/monster/Parsed5eMonster';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { LLMChain } from 'langchain/chains';
 
-export const warfLLM5eMonsterFromText = async (text: string): Promise<Warf5eLLMMonster> => {
+export const warfLLM5eMonsterFromText = async (text: string): Promise<Parsed5eLLMMonster> => {
   const llm = OpenAILLM();
 
   const prompt = PromptTemplate.fromTemplate(`
@@ -17,7 +17,7 @@ export const warfLLM5eMonsterFromText = async (text: string): Promise<Warf5eLLMM
     {formatInstructions}
   `);
 
-  const outputParser = StructuredOutputParser.fromZodSchema(Warf5eLLMMonsterSchema);
+  const outputParser = StructuredOutputParser.fromZodSchema(Parsed5eLLMMonsterSchema);
 
   const output = (
     await new LLMChain({
@@ -32,5 +32,5 @@ export const warfLLM5eMonsterFromText = async (text: string): Promise<Warf5eLLMM
 
   console.log('unparsed output | ', output);
 
-  return output as Warf5eLLMMonster;
+  return output as Parsed5eLLMMonster;
 };

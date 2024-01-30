@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Warf5eMonsterAbilitiesSchema } from './Parsed5eMonsterAbilities';
+import { Parsed5eMonsterAbilitiesSchema } from './Parsed5eMonsterAbilities';
 import { AlignmentEnumSchema } from '../../enums/Alignment';
 import { EnvironmentEnumSchema } from '../../enums/Environment';
 
@@ -8,10 +8,10 @@ import { EnvironmentEnumSchema } from '../../enums/Environment';
  * The schema that will be returned by the llm
  */
 // TODO - sync these enums with other schemas
-export const Warf5eLLMMonsterSchema = z.object({
+export const Parsed5eLLMMonsterSchema = z.object({
   name: z.string(),
   alignment: AlignmentEnumSchema,
-  abilities: Warf5eMonsterAbilitiesSchema,
+  abilities: Parsed5eMonsterAbilitiesSchema,
   armorClass: z.object({
     value: z.number(),
     // TODO - make this enum better
@@ -150,4 +150,4 @@ export const Warf5eLLMMonsterSchema = z.object({
     .describe('array of Legendary Actions a monster has'),
 });
 
-export type Warf5eLLMMonster = z.infer<typeof Warf5eLLMMonsterSchema>;
+export type Parsed5eLLMMonster = z.infer<typeof Parsed5eLLMMonsterSchema>;
