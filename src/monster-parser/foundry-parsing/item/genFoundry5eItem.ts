@@ -5,8 +5,8 @@ import { PromptTemplate } from 'langchain/prompts';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { LLMChain } from 'langchain/chains';
 import { z } from 'zod';
-import { genCustomFoundryItem } from './genCustomFoundryItem';
-import { genFoundryItemFromExample } from './genFoundryItemFromExample';
+import { genCustomFoundryItem } from './genCustomFoundry5eItem';
+import { genFoundryItemFromExample } from './genFoundry5eItemFromExample';
 
 // this is very rudimentary for now, just generating a blank item with the same name and description, using an existing item as a template if found
 export const genFoundryItemFromNameAndText = async (warfItemNameAndText: {
