@@ -38,7 +38,7 @@ class MonsterImporterForm extends FormApplication {
       });
   }
 
-  async _updateObject(event: Event, formData?: object | undefined): Promise<unknown> {
+  async _updateObject(event: Event, formData): Promise<unknown> {
     return 1;
   }
 }
