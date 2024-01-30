@@ -1,10 +1,6 @@
 import OpenAILLM from '../../openaillm';
 import { searchMonsterDBForItemWithName } from '../searchFoundryMonsterDB';
 import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/Foundry5eItem';
-import { PromptTemplate } from 'langchain/prompts';
-import { StructuredOutputParser } from 'langchain/output_parsers';
-import { LLMChain } from 'langchain/chains';
-import { z } from 'zod';
 import { genCustomFoundryItem } from './genCustomFoundry5eItem';
 import { genFoundryItemFromExample } from './genFoundry5eItemFromExample';
 
