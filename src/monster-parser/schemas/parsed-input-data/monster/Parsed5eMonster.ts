@@ -1,10 +1,8 @@
-import { sizeChoices } from '../../../choices';
 import { z } from 'zod';
-import { Warf5eMonsterAbilitiesSchema } from './Warf5eMonsterAbilities';
+import { Warf5eMonsterAbilitiesSchema } from './Parsed5eMonsterAbilities';
 import { AlignmentEnumSchema } from '../../enums/Alignment';
 import { EnvironmentEnumSchema } from '../../enums/Environment';
 
-// const sizeChoices = ;
 /**
  *
  * The schema that will be returned by the llm
