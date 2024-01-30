@@ -1,5 +1,6 @@
-// import { Foundry5eMonster } from '../monster-parser/schemas/foundry/monster/Foundry5eMonster';
-// import testRatkingWarfOutput from './quench/testRatkingWarfOutput';
+import { Foundry5eMonster } from '../monster-parser/schemas/foundry/monster/Foundry5eMonster';
+import { importFoundry5eMonsterToFoundry } from './importMonsterToFoundry';
+import testRatkingWarfOutput from './quench/testRatkingWarfOutput';
 import MonsterImporterForm from './ui/MonsterImporterForm';
 
 Hooks.once('init', async () => {
@@ -9,7 +10,7 @@ Hooks.once('init', async () => {
 Hooks.on('ready', async () => {
   console.log('llm-text-content-importer Ready!!');
 
-  // Temp for testing - Demonstrate importing a monster and opening sheet
+  // Temp for testing - Hardcoded Foundry5eMonster => Actor
   // const testRatkingActor = await importFoundry5eMonsterToFoundry(testRatkingWarfOutput as Foundry5eMonster);
   // testRatkingActor.sheet?.render(true);
 });

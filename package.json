@@ -63,6 +63,7 @@
   },
   "dependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
     "base64-js": "^1.5.1",
     "fs": "^0.0.1-security",
     "langchain": "^0.0.182-rc.1",

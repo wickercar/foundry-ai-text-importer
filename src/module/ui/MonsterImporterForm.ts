@@ -1,3 +1,5 @@
+import genFoundry5eMonsterActorFromTextBlock from '../genFoundryActorFromMonsterTextBlock';
+
 /**
  * Imports a monster from a single text block using AI
  *
@@ -31,6 +33,8 @@ class MonsterImporterForm extends FormApplication {
         const userText = $(html).find('#llmtci-userText').val() as string;
         this.userText = userText;
         console.log('monster text submitted: ', userText);
+        const actor = await genFoundry5eMonsterActorFromTextBlock(userText);
+        console.log('actor generated : ', actor);
       });
   }
 
