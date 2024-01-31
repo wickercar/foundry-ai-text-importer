@@ -13,7 +13,7 @@ export const Foundry5eItemSchema = z.object({
   type: z.enum(['weapon', 'equipment', 'spell', 'feat', 'class', 'subclass']), // these should be the types that apply to monsters but more for PCs
   img: z.string(),
   /** Optional fields, consider taking off **/
-  effects: z.array(z.string()).optional(),
+  effects: z.array(z.string()).optional().default([]),
   folder: z.null().optional(),
   sort: z.number().optional(),
   ownership: OwnershipSchema.optional(),
