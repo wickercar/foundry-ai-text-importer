@@ -54,7 +54,8 @@ export const genFoundryItemFromExample = async (
     })
   ).text;
 
-  console.log('genFoundryItemFromExampleNameText output: ', output);
+  // Remove fields that cause issues
+  delete output._id;
 
   return output;
 };
