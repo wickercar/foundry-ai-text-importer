@@ -1,5 +1,4 @@
-/* eslint-disable jest/expect-expect */
-/* eslint-disable jest/no-export */
+/* eslint-disable jest/expect-expect, jest/no-export */
 import foundryItemCompendia from '../../monster-parser/foundry-compendia/foundryItemCompendia';
 
 const registerExampleItemTests = (quench) => {
@@ -7,8 +6,8 @@ const registerExampleItemTests = (quench) => {
     'quench.llm-text-content-importer.testing-test',
     (context) => {
       const { describe, it, assert } = context;
+      // TODO - these are the specific ids from my compendia, won't work on other people's systems. Test against name?
       describe('Testing the example item search method for timing', function () {
-        this.timeout(1000000); // trying this timeout for compendium search, might need to be higher
         it('Finds BattleAxe in compendium by name', async function () {
           const foundItem = await foundryItemCompendia.findItemWithName('Battleaxe');
           console.log('foundItem', foundItem);

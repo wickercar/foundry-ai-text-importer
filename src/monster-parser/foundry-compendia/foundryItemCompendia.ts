@@ -8,13 +8,11 @@ const findItemWithName = async (name: string): Promise<Foundry5eItem | null> => 
   const itemPacks = game.packs.filter((p) => p.metadata.type === 'Item');
   for (const pack of itemPacks) {
     const index = await pack.getIndex();
-    console.log('index: ', index);
     for (const entry of index) {
-      // @ts-ignore (Type for getDocument is incorrect in foundry-vtt-types - Pick)
-      const item = (await pack.getDocument(entry?._id)) as Item;
-      // Check for exact match in name
-      if (item?.name === name) {
-        // return the first one found with the same name
+      // @ts-ignore (Type for entry is incorrect in foundry-vtt-types - Pick)
+      if (entry?.name === name) {
+        // @ts-ignore (Type for entry is incorrect in foundry-vtt-types - Pick)
+        const item = (await pack.getDocument(entry?._id)) as Item;
         // @ts-ignore (hard casting here)
         return item as Foundry5eItem;
       }
