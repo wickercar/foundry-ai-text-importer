@@ -12,4 +12,5 @@ export const EnvironmentEnumSchema = z.enum([
   'Hill',
   'Mountain',
   'Swamp',
+  '',
 ]);
