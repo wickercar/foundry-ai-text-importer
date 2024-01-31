@@ -9,7 +9,7 @@ const PriceSchema = z.object({
 export const Foundry5eItemSchema = z.object({
   _id: z.string().optional(),
   name: z.string(),
-  type: z.string(),
+  type: z.enum(['weapon', 'equipment', 'spell', 'feat', 'class', 'subclass']), // these should be the types that apply to monsters but more for PCs
   img: z.string(),
   /** Optional fields, consider taking off **/
   effects: z.array(z.string()).optional(),
