@@ -20,18 +20,18 @@ export default class OpenAIAPIKeyForm extends FormApplication {
       template: 'modules/llm-text-content-importer/templates/openai_api_key_form.hbs',
       width: 500,
       height: 'auto',
-      closeOnSubmit: true,
+      closeOnSubmit: false,
       submitOnChange: false,
-      submitOnClose: true,
+      submitOnClose: false,
       id: 'openai-api-key-form',
     });
   }
   /** @override */
-  getData(options): any {
-    console.log('OpenAIAPIKeyStorage.getApiKey()', OpenAIAPIKeyStorage.getApiKey());
+  async getData(options): Promise<any> {
     return {
       // TODO - add non-localStorage option
       apiKey: OpenAIAPIKeyStorage.getApiKey(),
+      isValid: await OpenAIAPIKeyStorage.isStoredApiKeyValid(),
     };
   }
 
@@ -41,7 +41,6 @@ export default class OpenAIAPIKeyForm extends FormApplication {
   }
 
   async _updateObject(event, formData) {
-    console.log('Updating OpenAI API Key', formData);
     OpenAIAPIKeyStorage.setApiKey(formData.apiKey);
   }
 }

@@ -6,6 +6,11 @@
   <form id="openai-api-key-form" autocomplete="off" onsubmit="event.preventDefault();">
     <label for="openai-api-key">OpenAI Secret API Key</label>
     <input type="password" id="apiKey" name="apiKey" value="{{apiKey}}" />
-    <button type="submit">Save</button>
+    <button type="submit">Save and Validate</button>
+    {{#if isValid}}
+    <p class="success-message">Your API key is valid!</p>
+    {{else}}
+    <p class="error-message">Invalid Key provided</p>
+    {{/if}}
   </form>
 </div>
