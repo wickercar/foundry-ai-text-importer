@@ -1,11 +1,12 @@
 import { z } from 'zod';
+import { FoundrySize, FoundrySizeEnumSchema } from '../../enums/Size';
 
 // bypasses example:
 const CustomDamageAdjustmentSchema = z.string().default('');
 
 // TODO - this could use some cleaning up but should work for now
 export const Foundry5eMonsterTraitsSchema = z.object({
-  size: z.enum(['tiny', 'sm', 'med', 'lg', 'huge', 'grg']).default('med').optional(),
+  size: FoundrySizeEnumSchema,
   di: z.object({
     value: z.array(z.string()).describe('damage immunities, e.g. ["poison"]'),
     bypasses: z.array(z.string()).describe('damage immunities that are bypassed, e.g. ["ada", "mgc"]'),

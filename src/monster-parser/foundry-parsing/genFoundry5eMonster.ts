@@ -24,6 +24,7 @@ import { genFoundryItemFromNameAndText } from './item/genFoundry5eItem';
 import { Foundry5eItem } from '../schemas/foundry/item/Foundry5eItem';
 
 import gargoyleJSON from '../srd/foundry_db_pastes/gargoyle.json';
+import { sizeToFoundrySize } from '../schemas/enums/Size';
 
 const genFoundry5eMonster = async (parsedMonsterData: Parsed5eLLMMonster): Promise<Foundry5eMonster> => {
   const converter = new WarfMonsterToFoundryConverter(parsedMonsterData);
@@ -165,14 +166,7 @@ class WarfMonsterToFoundryConverter implements Foundry5eMonster {
   get traits(): Foundry5eMonsterTraits {
     // TODO - handle bypasses
     return {
-      size: {
-        tiny: 'tiny',
-        small: 'S',
-        medium: 'M',
-        large: 'L',
-        huge: 'H',
-        gargantuan: 'G',
-      }[this.parsedMonsterData.size],
+      size: sizeToFoundrySize(this.parsedMonsterData.size),
       di: {
         value: this.parsedMonsterData.damageImmunities,
         bypasses: [],
