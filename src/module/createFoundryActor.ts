@@ -10,8 +10,8 @@ import { Foundry5eMonster } from '../monster-parser/schemas/foundry/monster/Foun
  *
  * @return the created actor
  */
-export const importFoundry5eMonsterToFoundry = async (monster: Foundry5eMonster): Promise<Actor> => {
-  console.log('importing monster to foundry');
+export const createFoundryActor = async (monster: Foundry5eMonster): Promise<Actor> => {
+  console.log('creating foundry actor...');
   console.log(monster);
 
   // temp - adding timestamp to name for easy of use
