@@ -5,6 +5,7 @@ import registerExampleItemTests from './exampleItemTests';
 
 const registerQuenchTests = (quench) => {
   registerDummyTest(quench);
+  registerExampleItemTests(quench);
 };
 
 export default registerQuenchTests;
