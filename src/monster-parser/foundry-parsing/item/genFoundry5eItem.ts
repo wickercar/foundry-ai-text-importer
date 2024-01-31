@@ -3,6 +3,7 @@ import { searchMonsterDBForItemWithName } from '../searchFoundryMonsterDB';
 import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/Foundry5eItem';
 import { genCustomFoundryItem } from './genCustomFoundry5eItem';
 import { genFoundryItemFromExample } from './genFoundry5eItemFromExample';
+import FoundryItemCompendia from '../../foundry-compendia/foundryItemCompendia';
 
 // this is very rudimentary for now, just generating a blank item with the same name and description, using an existing item as a template if found
 export const genFoundryItemFromNameAndText = async (itemNameAndText: {
@@ -12,7 +13,7 @@ export const genFoundryItemFromNameAndText = async (itemNameAndText: {
   const { name, text } = itemNameAndText;
   // TODO - investigate porting over WarfItemToFoundryConverter from server code
 
-  const itemWithSameName = await searchMonsterDBForItemWithName(name);
+  const itemWithSameName = await FoundryItemCompendia.findItemWithName(name);
   // Option 1 - try to find an example and use it as inspiration
   if (itemWithSameName != null) {
     return genFoundryItemFromExample(itemWithSameName, name, text);
