@@ -11,6 +11,7 @@ export const genFoundryItemFromExample = async (
   text: string,
 ): Promise<Foundry5eItem> => {
   const llm = OpenAILLM();
+  console.log('exampleItem: ', exampleItem);
 
   const prompt = PromptTemplate.fromTemplate(`
     Parse the provided item text into the json schema specified below. The outputted fields should have the same values as the base item provided unless the itemText suggests a clear difference.
@@ -56,6 +57,7 @@ export const genFoundryItemFromExample = async (
 
   // Remove fields that cause issues
   delete output._id;
+  output.effects = [];
 
   // Passthrough fields
   output.img = exampleItem.img;
