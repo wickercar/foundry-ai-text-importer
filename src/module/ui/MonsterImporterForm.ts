@@ -10,10 +10,13 @@ import OpenAIAPIKeyForm from '../../monster-parser/settings/openai-api-key/OpenA
  **/
 class MonsterImporterForm extends FormApplication {
   userText: string;
+  isLoading = false;
+  isAPIKeyValid = true;
 
   constructor(options) {
     super(options);
     this.userText = '';
+    this.checkAPIKey();
   }
 
   static get defaultOptions() {
@@ -27,6 +30,16 @@ class MonsterImporterForm extends FormApplication {
     return options;
   }
 
+  startLoad() {
+    this.isLoading = true;
+    this.render();
+  }
+
+  endLoad() {
+    this.isLoading = false;
+    this.render();
+  }
+
   activateListeners(html) {
     super.activateListeners(html);
     $(html)
@@ -35,9 +48,11 @@ class MonsterImporterForm extends FormApplication {
         event.preventDefault();
         const userText = $(html).find('#llmtci-userText').val() as string;
         this.userText = userText;
+        this.startLoad();
         console.log('monster text submitted: ', userText);
         const actor = await genFoundry5eMonsterActorFromTextBlock(userText);
         console.log('actor generated : ', actor);
+        this.endLoad();
       });
     $(html)
       .find('#llmtci-updateAPIKey')
@@ -47,10 +62,23 @@ class MonsterImporterForm extends FormApplication {
       });
   }
 
+  async checkAPIKey() {
+    this.startLoad();
+    const isValid = await OpenAIAPIKeyStorage.isStoredApiKeyValid();
+    if (!isValid) {
+      console.error('Invalid API Key');
+      this.isAPIKeyValid = false;
+    } else {
+      this.isAPIKeyValid = true;
+    }
+    this.endLoad();
+  }
+
   async getData(): Promise<any> {
     return {
       title: this.options.title,
-      invalidAPIKey: !(await OpenAIAPIKeyStorage.isStoredApiKeyValid()),
+      invalidAPIKey: !this.isAPIKeyValid,
+      isLoading: this.isLoading,
     };
   }
 
