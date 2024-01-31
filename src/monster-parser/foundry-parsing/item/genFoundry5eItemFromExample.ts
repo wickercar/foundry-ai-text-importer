@@ -57,5 +57,8 @@ export const genFoundryItemFromExample = async (
   // Remove fields that cause issues
   delete output._id;
 
+  // Passthrough fields
+  output.img = exampleItem.img;
+
   return output;
 };
