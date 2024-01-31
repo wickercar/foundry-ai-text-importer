@@ -25,7 +25,7 @@ export const Foundry5eMonsterDetailsSchema = z.object({
   environment: EnvironmentEnumSchema,
   cr: z.number().describe('challenge rating - whole number from 1 to 20 or decimal between 0 and 1'),
   spellLevel: z.number().default(0),
-  source: z.literal('Warf Monster Importer'),
+  source: z.literal('AI Monster Importer'),
 });
 
 export type Foundry5eMonsterDetails = z.infer<typeof Foundry5eMonsterDetailsSchema>;

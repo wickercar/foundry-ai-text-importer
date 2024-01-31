@@ -152,7 +152,7 @@ class WarfMonsterToFoundryConverter implements Foundry5eMonster {
         custom: '',
       },
       cr: this.parsedMonsterData.challengeRating,
-      source: 'Warf Monster Importer',
+      source: 'AI Monster Importer',
       biography: {
         value: this.parsedMonsterData.biography,
         public: this.parsedMonsterData.biography,
