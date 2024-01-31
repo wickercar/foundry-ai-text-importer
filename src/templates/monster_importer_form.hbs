@@ -1,7 +1,11 @@
 <form id="flavorerForm">
   <h1>{{title}}</h1>
-
   <label for="textInput">Prompt:</label>
+  {{#if invalidAPIKey}}
+  <p class="error-message">Your OpenAI API Key is invalid! Click below to update it</p>
+  <button type="button" id="llmtci-updateAPIKey">Update API Key</button>
+  {{else}}
   <textarea style="height: 200px" id="llmtci-userText" name="promptText"></textarea>
   <button type="submit" id="llmtci-submit">Submit</button>
+  {{/if}}
 </form>

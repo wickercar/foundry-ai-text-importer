@@ -9,8 +9,8 @@ type Data = {
 
 // @ts-ignore - it's got a problem with my defaultOptions, I can't get why
 export default class OpenAIAPIKeyForm extends FormApplication {
-  constructor(object, options) {
-    super(object, options);
+  constructor(options) {
+    super(options);
   }
 
   static get defaultOptions() {
@@ -42,5 +42,6 @@ export default class OpenAIAPIKeyForm extends FormApplication {
 
   async _updateObject(event, formData) {
     OpenAIAPIKeyStorage.setApiKey(formData.apiKey);
+    this.render();
   }
 }

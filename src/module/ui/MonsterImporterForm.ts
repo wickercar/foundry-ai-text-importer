@@ -1,4 +1,7 @@
+import { OpenAI } from 'langchain/llms/openai';
 import genFoundry5eMonsterActorFromTextBlock from '../genFoundryActorFromMonsterTextBlock';
+import OpenAIAPIKeyStorage from '../../monster-parser/settings/openai-api-key/OpenAIAPIKeyStorage';
+import OpenAIAPIKeyForm from '../../monster-parser/settings/openai-api-key/OpenAIAPIKeyForm';
 
 /**
  * Imports a monster from a single text block using AI
@@ -36,6 +39,19 @@ class MonsterImporterForm extends FormApplication {
         const actor = await genFoundry5eMonsterActorFromTextBlock(userText);
         console.log('actor generated : ', actor);
       });
+    $(html)
+      .find('#llmtci-updateAPIKey')
+      .on('click', async (event) => {
+        event.preventDefault();
+        new OpenAIAPIKeyForm(OpenAIAPIKeyForm.defaultOptions).render(true);
+      });
+  }
+
+  async getData(): Promise<any> {
+    return {
+      title: this.options.title,
+      invalidAPIKey: !(await OpenAIAPIKeyStorage.isStoredApiKeyValid()),
+    };
   }
 
   async _updateObject(event: Event, formData): Promise<unknown> {
