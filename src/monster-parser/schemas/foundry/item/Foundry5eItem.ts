@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { FoundryMonsterStatsSchema, OwnershipSchema } from '../monster/FoundryMonster';
+import { ActivationTypeEnumSchema } from '../../enums/ActivationType';
 
 const PriceSchema = z.object({
   value: z.number().default(0),
@@ -37,9 +38,9 @@ export const Foundry5eItemSchema = z.object({
       }),
       source: z.string(),
       activation: z.object({
-        type: z.string(),
-        cost: z.number().nullable(),
-        condition: z.string(),
+        type: ActivationTypeEnumSchema.default('action'),
+        cost: z.number().default(1),
+        condition: z.string().default(''),
       }),
       duration: z.object({
         value: z.string(),
