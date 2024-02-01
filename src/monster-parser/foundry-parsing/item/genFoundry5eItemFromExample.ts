@@ -41,6 +41,7 @@ export const genFoundryItemFromExample = async (
   });
 
   const outputParser = StructuredOutputParser.fromZodSchema(Foundry5eItemSchema);
+  console.log('item formatInstructions: ', outputParser.getFormatInstructions());
 
   const output = (
     await new LLMChain({

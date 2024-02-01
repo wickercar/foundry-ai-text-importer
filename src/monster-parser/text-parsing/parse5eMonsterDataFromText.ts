@@ -5,6 +5,10 @@ import { StructuredOutputParser } from 'langchain/output_parsers';
 import { LLMChain } from 'langchain/chains';
 import RunTimer from '../../module/performanceUtils/RunTimer';
 
+export const create5eLLMMonsterOutputParser = (): StructuredOutputParser<typeof Parsed5eLLMMonsterSchema> => {
+  return StructuredOutputParser.fromZodSchema(Parsed5eLLMMonsterSchema);
+};
+
 export const parse5eMonsterDataFromText = async (text: string): Promise<Parsed5eLLMMonster> => {
   const llm = OpenAILLM();
   const timer = RunTimer.getInstance();
@@ -19,7 +23,9 @@ export const parse5eMonsterDataFromText = async (text: string): Promise<Parsed5e
     {formatInstructions}
   `);
 
-  const outputParser = StructuredOutputParser.fromZodSchema(Parsed5eLLMMonsterSchema);
+  const outputParser = create5eLLMMonsterOutputParser();
+
+  console.log('monster formatInstructions: ', outputParser.getFormatInstructions());
 
   const output = (
     await new LLMChain({
