@@ -2,6 +2,9 @@ import { OpenAI } from 'langchain/llms/openai';
 import genFoundry5eMonsterActorFromTextBlock from '../genFoundryActorFromMonsterTextBlock';
 import OpenAIAPIKeyStorage from '../../monster-parser/settings/openai-api-key/OpenAIAPIKeyStorage';
 import OpenAIAPIKeyForm from '../../monster-parser/settings/openai-api-key/OpenAIAPIKeyForm';
+import foundryMonsterCompendia, {
+  DEFAULT_MONSTER_COMPENDIUM_NAME,
+} from '../../monster-parser/foundry-compendia/foundryMonsterCompendia';
 
 /**
  * Imports a monster from a single text block using AI
@@ -60,6 +63,14 @@ class MonsterImporterForm extends FormApplication {
         event.preventDefault();
         new OpenAIAPIKeyForm(OpenAIAPIKeyForm.defaultOptions).render(true);
       });
+    $(html)
+      .find('#llmtci-compendiumSelect')
+      .on('change', async (event) => {
+        event.preventDefault();
+        const selectedCompendiumName = $(html).find('#llmtci-compendiumSelect').val();
+        console.log('changing compendium setting to: ', selectedCompendiumName);
+        game.settings.set('llm-text-content-importer', 'compendiumImportDestination', selectedCompendiumName);
+      });
   }
 
   async checkAPIKey() {
@@ -75,10 +86,21 @@ class MonsterImporterForm extends FormApplication {
   }
 
   async getData(): Promise<any> {
+    await foundryMonsterCompendia.validateAndMaybeResetSelectedCompendium();
+    const actorCompendia = await foundryMonsterCompendia.getAllActorCompendia();
+    const selectedCompendiumName = game.settings.get('llm-text-content-importer', 'compendiumImportDestination');
+    const actorCompendiumOptions = actorCompendia.map((compendium) => {
+      return {
+        name: compendium.metadata.name,
+        label: compendium.metadata.label,
+        isSelected: selectedCompendiumName === compendium.metadata.name,
+      };
+    });
     return {
       title: this.options.title,
       invalidAPIKey: !this.isAPIKeyValid,
       isLoading: this.isLoading,
+      actorCompendiumOptions,
     };
   }
 

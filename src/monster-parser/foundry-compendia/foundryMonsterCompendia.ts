@@ -6,18 +6,45 @@ const getCompendiumByName = async (compendiumName: string, packageType = 'world'
   return await game.packs.get(`${packageType}.${compendiumName}`);
 };
 
+const validateAndMaybeResetSelectedCompendium = async () => {
+  // handle a compendium having been deleted.
+  const selectedCompendiumName = game.settings.get(
+    'llm-text-content-importer',
+    'compendiumImportDestination',
+  ) as string;
+  const compendium = await getCompendiumByName(selectedCompendiumName);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-ignore I think this is a bug in the foundry-vtt-types - thinks it should be "entity"
+  if (!compendium || compendium.metadata.type !== 'Actor') {
+    console.error('Selected compendium is not valid, resetting to default');
+    game.settings.set('llm-text-content-importer', 'compendiumImportDestination', DEFAULT_MONSTER_COMPENDIUM_NAME);
+  }
+};
+
 const saveAIImportedMonsterToCompendium = async (
   monster: Actor,
-  compendiumName: string | undefined = DEFAULT_MONSTER_COMPENDIUM_NAME,
-  compendiumLabel: string | undefined = DEFAULT_MONSTER_COMPENDIUM_NAME,
+  compendiumNameInput: string | undefined = undefined,
+  compendiumLabelInput: string | undefined = undefined,
 ): Promise<void> => {
+  // If not specified, read the setting for the compendium name
+  let compendiumName, compendiumLabel;
+  if (compendiumNameInput === undefined) {
+    await validateAndMaybeResetSelectedCompendium();
+    compendiumName = game.settings.get('llm-text-content-importer', 'compendiumImportDestination');
+  } else {
+    compendiumName = compendiumNameInput;
+    compendiumLabel = compendiumLabelInput;
+  }
+  // TODO - when you come back, add settings and use them to supply compendiumName and compendiumLabel, defaulting the name and label to undefined in the signature
   const compendium = await getCompendiumOrCreateIfNotExists(compendiumName, compendiumLabel);
   await compendium?.importDocument(monster);
   console.log('Monster saved to compendium', monster, compendium);
 };
 
 const getAllActorCompendia = async () => {
-  return game.packs.filter((pack) => pack.metadata.entity === 'Actor');
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-ignore I think this is a bug in the foundry-vtt-types - thinks it should be "entity"
+  return game.packs.filter((pack) => pack.metadata.type === 'Actor');
 };
 
 const getCompendiumOrCreateIfNotExists = async (compendiumName, compendiumLabel) => {
@@ -28,7 +55,7 @@ const getCompendiumOrCreateIfNotExists = async (compendiumName, compendiumLabel)
     compendium = await CompendiumCollection.createCompendium(
       {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore I think this is a bug in the foundry-vtt-types
+        //@ts-ignore I think this is a bug in the foundry-vtt-types - thinks it should be "entity"
         type: 'Actor',
         label: compendiumLabel,
         name: compendiumName,
@@ -36,7 +63,6 @@ const getCompendiumOrCreateIfNotExists = async (compendiumName, compendiumLabel)
         path: `world.${compendiumName}`,
         private: true,
         system: 'dnd5e',
-        // message: 'Compendium for AI imported monsters',
       },
       {},
     );
@@ -50,4 +76,5 @@ export default {
   getCompendiumOrCreateIfNotExists,
   saveAIImportedMonsterToCompendium,
   getAllActorCompendia,
+  validateAndMaybeResetSelectedCompendium,
 };

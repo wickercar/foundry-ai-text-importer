@@ -6,6 +6,14 @@
   <p class="error-message">Your OpenAI API Key is invalid! Click below to update it</p>
   <button type="button" id="llmtci-updateAPIKey">Update API Key</button>
   {{else}}
+  {{! Compendium Selector }}
+  <select id="llmtci-compendiumSelect" class="form-select"=>
+    {{#each actorCompendiumOptions}}
+    <option value="{{this.name}}" {{#if this.isSelected}}selected{{/if}}>
+      {{this.label}}
+    </option>
+    {{/each}}
+  </select>
   <label for="textInput">Prompt:</label>
   <textarea style="height: 200px" id="llmtci-userText" name="promptText"></textarea>
   <button type="submit" id="llmtci-submit">Submit</button>
