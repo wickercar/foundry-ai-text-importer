@@ -7,6 +7,7 @@
   <button type="button" id="llmtci-updateAPIKey">Update API Key</button>
   {{else}}
   {{! Compendium Selector }}
+  <label for="llmtci-compendiumSelect">Compendium:</label>
   <select id="llmtci-compendiumSelect" class="form-select"=>
     {{#each actorCompendiumOptions}}
     <option value="{{this.name}}" {{#if this.isSelected}}selected{{/if}}>
@@ -14,8 +15,21 @@
     </option>
     {{/each}}
   </select>
-  <label for="textInput">Prompt:</label>
-  <textarea style="height: 200px" id="llmtci-userText" name="promptText"></textarea>
+  {{! Model Selector }}
+  <label for="llmtci-modelSelect">Model:</label>
+  <select id="llmtci-modelSelect" class="form-select">
+    {{#each modelOptions}}
+    <option value="{{this.name}}" {{#if this.isSelected}}selected{{/if}}>
+      {{this.label}}
+    </option>
+    {{/each}}
+  </select>
+  <div class="flexrow">
+    <label>Monster Stat Block:</label>
+  </div>
+  <div class="flexrow">
+    <textarea style="height: 200px" id="llmtci-userText" name="promptText"></textarea>
+  </div>
   <button type="submit" id="llmtci-submit">Submit</button>
   {{/if}}
 </form>

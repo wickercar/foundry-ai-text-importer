@@ -1,5 +1,5 @@
 import { PromptTemplate } from 'langchain/prompts';
-import OpenAILLM from '../../openaillm';
+import OpenAILLM from '../../llm/openaillm';
 import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/Foundry5eItem';
 import { z } from 'zod';
 import { StructuredOutputParser } from 'langchain/output_parsers';

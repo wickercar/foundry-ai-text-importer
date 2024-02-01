@@ -5,6 +5,7 @@ import OpenAIAPIKeyForm from '../../monster-parser/settings/openai-api-key/OpenA
 import foundryMonsterCompendia, {
   DEFAULT_MONSTER_COMPENDIUM_NAME,
 } from '../../monster-parser/foundry-compendia/foundryMonsterCompendia';
+import { fetchGPTModels } from '../../monster-parser/llm/openaiModels';
 
 /**
  * Imports a monster from a single text block using AI
@@ -24,7 +25,7 @@ class MonsterImporterForm extends FormApplication {
 
   static get defaultOptions() {
     const options = super.defaultOptions;
-    options.title = 'Monster Importer';
+    options.title = 'AI Monster Importer';
     options.template = 'modules/llm-text-content-importer/templates/monster_importer_form.hbs';
     options.width = 900;
     options.height = 'auto';
@@ -71,6 +72,13 @@ class MonsterImporterForm extends FormApplication {
         console.log('changing compendium setting to: ', selectedCompendiumName);
         game.settings.set('llm-text-content-importer', 'compendiumImportDestination', selectedCompendiumName);
       });
+    $(html)
+      .find('#llmtci-modelSelect')
+      .on('change', async (event) => {
+        event.preventDefault();
+        const selectedModelId = $(html).find('#llmtci-modelSelect').val();
+        game.settings.set('llm-text-content-importer', 'openaiModel', selectedModelId);
+      });
   }
 
   async checkAPIKey() {
@@ -89,6 +97,7 @@ class MonsterImporterForm extends FormApplication {
     await foundryMonsterCompendia.ensureDefaultCompendiumExists();
     await foundryMonsterCompendia.validateAndMaybeResetSelectedCompendium();
     const actorCompendia = await foundryMonsterCompendia.getAllActorCompendia();
+    // Compendium options
     const selectedCompendiumName = game.settings.get('llm-text-content-importer', 'compendiumImportDestination');
     const actorCompendiumOptions = actorCompendia.map((compendium) => {
       return {
@@ -97,11 +106,23 @@ class MonsterImporterForm extends FormApplication {
         isSelected: selectedCompendiumName === compendium.metadata.name,
       };
     });
+    // LLM model options
+    // TODO - redundant call to models endpoint, also done within validateAndMaybeResetSelectedCompendium
+    const gptModels = await fetchGPTModels();
+    const selectedModelId = game.settings.get('llm-text-content-importer', 'openaiModel');
+    const modelOptions = gptModels.map((model) => {
+      return {
+        name: model.id,
+        label: model.id,
+        isSelected: selectedModelId === model.id,
+      };
+    });
     return {
       title: this.options.title,
       invalidAPIKey: !this.isAPIKeyValid,
       isLoading: this.isLoading,
       actorCompendiumOptions,
+      modelOptions,
     };
   }
 

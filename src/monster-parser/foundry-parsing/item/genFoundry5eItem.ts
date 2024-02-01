@@ -1,4 +1,4 @@
-import OpenAILLM from '../../openaillm';
+import OpenAILLM from '../../llm/openaillm';
 import { searchMonsterDBForItemWithName } from '../searchFoundryMonsterDB';
 import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/Foundry5eItem';
 import { genCustomFoundryItem } from './genCustomFoundry5eItem';

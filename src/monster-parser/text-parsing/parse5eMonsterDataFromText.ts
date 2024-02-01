@@ -1,5 +1,5 @@
 import { PromptTemplate } from 'langchain/prompts';
-import OpenAILLM from '../openaillm';
+import OpenAILLM from '../llm/openaillm';
 import { Parsed5eLLMMonster, Parsed5eLLMMonsterSchema } from '../schemas/parsed-input-data/monster/Parsed5eMonster';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { LLMChain } from 'langchain/chains';

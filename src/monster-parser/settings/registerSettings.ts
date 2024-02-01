@@ -16,5 +16,11 @@ export const registerSettings = (): void => {
     config: true, // Might want to take it out and just have it in input UI
     scope: 'world', // "world" | "client" | "server"
   });
-  console.log('registered `llm-text-content-importer` settings!');
+  game.settings.register('llm-text-content-importer', 'openaiModel', {
+    name: 'OpenAI Model',
+    hint: 'The OpenAI model to use for generating monsters',
+    type: String,
+    config: true, // Might want to take it out and just have it in input UI
+    scope: 'world', // "world" | "client" | "server"
+  });
 };
