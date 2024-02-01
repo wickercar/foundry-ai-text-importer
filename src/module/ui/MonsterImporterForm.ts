@@ -86,6 +86,7 @@ class MonsterImporterForm extends FormApplication {
   }
 
   async getData(): Promise<any> {
+    await foundryMonsterCompendia.ensureDefaultCompendiumExists();
     await foundryMonsterCompendia.validateAndMaybeResetSelectedCompendium();
     const actorCompendia = await foundryMonsterCompendia.getAllActorCompendia();
     const selectedCompendiumName = game.settings.get('llm-text-content-importer', 'compendiumImportDestination');

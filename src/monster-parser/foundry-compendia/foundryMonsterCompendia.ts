@@ -6,6 +6,14 @@ const getCompendiumByName = async (compendiumName: string, packageType = 'world'
   return await game.packs.get(`${packageType}.${compendiumName}`);
 };
 
+const ensureDefaultCompendiumExists = async () => {
+  const defaultCompendium = await getCompendiumByName(DEFAULT_MONSTER_COMPENDIUM_NAME);
+  if (!defaultCompendium) {
+    return await getCompendiumOrCreateIfNotExists(DEFAULT_MONSTER_COMPENDIUM_NAME, DEFAULT_MONSTER_COMPENDIUM_LABEL);
+  }
+  return defaultCompendium;
+};
+
 const validateAndMaybeResetSelectedCompendium = async () => {
   // handle a compendium having been deleted.
   const selectedCompendiumName = game.settings.get(
@@ -17,7 +25,9 @@ const validateAndMaybeResetSelectedCompendium = async () => {
   //@ts-ignore I think this is a bug in the foundry-vtt-types - thinks it should be "entity"
   if (!compendium || compendium.metadata.type !== 'Actor') {
     console.error('Selected compendium is not valid, resetting to default');
-    game.settings.set('llm-text-content-importer', 'compendiumImportDestination', DEFAULT_MONSTER_COMPENDIUM_NAME);
+    // Ensure default compendium exists
+    const defaultCompendium = await ensureDefaultCompendiumExists();
+    game.settings.set('llm-text-content-importer', 'compendiumImportDestination', defaultCompendium.metadata.name);
   }
 };
 
@@ -77,4 +87,5 @@ export default {
   saveAIImportedMonsterToCompendium,
   getAllActorCompendia,
   validateAndMaybeResetSelectedCompendium,
+  ensureDefaultCompendiumExists,
 };
