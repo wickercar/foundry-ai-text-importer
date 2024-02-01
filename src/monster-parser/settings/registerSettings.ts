@@ -2,23 +2,23 @@ import OpenAIAPIKeyForm from './openai-api-key/OpenAIAPIKeyForm';
 
 export const registerSettings = (): void => {
   game.settings.registerMenu('llm-text-content-importer', 'openaiAPIKeyMenu', {
-    name: game.i18n.localize('LLMTCI.OpenAIAPIKeySubmenuButtonLabel'),
-    label: game.i18n.localize('LLMTCI.OpenAIAPIKeySubmenuButtonLabel'),
-    hint: game.i18n.localize('LLMTCI.OpenAIAPIKeySubmenuButtonHint'),
+    name: 'OpenAI API Key',
+    label: 'OpenAI API Key',
+    hint: 'Your Secret API key for OpenAI (stored locally)',
     icon: 'fas fa-wrench',
     type: OpenAIAPIKeyForm, // Number, Boolean, String, Object
     restricted: true,
   });
   game.settings.register('llm-text-content-importer', 'compendiumImportDestination', {
-    name: game.i18n.localize('LLMTCI.CompendiumImportDestinationSettingLabel'),
-    hint: game.i18n.localize('LLMTCI.CompendiumImportDestinationSettingHint'),
+    name: 'Compendium Import Destination',
+    hint: 'The compendium your monsters will be imported to',
     type: String,
     config: true, // Might want to take it out and just have it in input UI
     scope: 'world', // "world" | "client" | "server"
   });
   game.settings.register('llm-text-content-importer', 'openaiModel', {
-    name: game.i18n.localize('LLMTCI.OpenAIModelSettingLabel'),
-    hint: game.i18n.localize('LLMTCI.OpenAIModelSettingHint'),
+    name: 'OpenAI Model',
+    hint: 'The OpenAI model to use for generating monsters',
     type: String,
     config: true, // Might want to take it out and just have it in input UI
     scope: 'world', // "world" | "client" | "server"

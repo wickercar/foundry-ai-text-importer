@@ -1,16 +1,16 @@
-<h2>{{localize 'LLMTCI.APIKeySubmenuTitle'}}</h2>
-<p>{{localize 'LLMTCI.APIKeySubmenuDescription'}}<a href="https://beta.openai.com/signup/">{{localize
-    'LLMTCI.APIKeySubmenuDescriptionLink'}}</a>.</p>
+<h2>OpenAI Secret API Key</h2>
+<p>Enter your OpenAI Secret API key here! You can get one from the <a href="https://beta.openai.com/signup/">OpenAI
+    website</a>.</p>
 
 <div class="form-description">
   <form id="openai-api-key-form" autocomplete="off" onsubmit="event.preventDefault();">
-    <label for="openai-api-key">{{localize 'LLMTCI.OpenAISecretAPIKeyEntryLabel'}}</label>
+    <label for="openai-api-key">OpenAI Secret API Key</label>
     <input type="password" id="apiKey" name="apiKey" value="{{apiKey}}" />
-    <button type="submit">{{localize 'LLMTCI.SaveAndValidateAPIKeyButton'}}</button>
+    <button type="submit">Save and Validate</button>
     {{#if isValid}}
-    <p class="success-message">{{localize 'LLMTCI.APIKeyIsValidMessage'}}</p>
+    <p class="success-message">Your API key is valid!</p>
     {{else}}
-    <p class="error-message">{{localize 'LLMTCI.APIKeyIsInvalidMessage'}}</p>
+    <p class="error-message">Invalid Key provided</p>
     {{/if}}
   </form>
 </div>
