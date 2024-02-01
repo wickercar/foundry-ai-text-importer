@@ -25,6 +25,7 @@ import { Foundry5eItem } from '../schemas/foundry/item/Foundry5eItem';
 
 import gargoyleJSON from '../srd/foundry_db_pastes/gargoyle.json';
 import { sizeToFoundrySize } from '../schemas/enums/Size';
+import RunTimer from '../../module/performanceUtils/RunTimer';
 
 const genFoundry5eMonster = async (parsedMonsterData: Parsed5eLLMMonster): Promise<Foundry5eMonster> => {
   const converter = new WarfMonsterToFoundryConverter(parsedMonsterData);
@@ -64,12 +65,15 @@ class WarfMonsterToFoundryConverter implements Foundry5eMonster {
       ...this.parsedMonsterData.actions,
       ...this.parsedMonsterData.legendaryActions,
     ];
+    const timer = RunTimer.getInstance();
+    console.log(`Starting to generate ${allItemNameAndTexts.length} items, ${timer.timeElapsed()}s elapsed`);
     const allItems = await Promise.all(
       allItemNameAndTexts.map(async ({ name, text }) => {
         const item = await genFoundryItemFromNameAndText({ name, text });
         return item;
       }),
     );
+    console.log(`Items generated, ${timer.timeElapsed()}s elapsed`);
     this.items = allItems;
   }
 

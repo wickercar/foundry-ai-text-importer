@@ -1,6 +1,9 @@
+import RunTimer from '../../../module/performanceUtils/RunTimer';
 import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/Foundry5eItem';
 
 export const genCustomFoundryItem = (name: string, text: string): Foundry5eItem => {
+  const timer = RunTimer.getInstance();
+  console.log(`Generating custom foundry item, ${timer.timeElapsed()}s elapsed`);
   // TODO - this is boilerplate for now, just replacing name and description with name and text. Will want to make it a just holding it here to finish the foundry import piece
   const item = Foundry5eItemSchema.parse({
     name,

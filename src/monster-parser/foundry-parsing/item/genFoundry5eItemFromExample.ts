@@ -4,6 +4,7 @@ import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/F
 import { z } from 'zod';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { LLMChain } from 'langchain/chains';
+import RunTimer from '../../../module/performanceUtils/RunTimer';
 
 export const genFoundryItemFromExample = async (
   exampleItem: Foundry5eItem,
@@ -11,8 +12,8 @@ export const genFoundryItemFromExample = async (
   text: string,
 ): Promise<Foundry5eItem> => {
   const llm = OpenAILLM();
-  console.log('exampleItem: ', exampleItem);
-
+  const timer = RunTimer.getInstance();
+  console.log(`Starting to generate item ${name} from example, ${timer.timeElapsed()}s elapsed`);
   const prompt = PromptTemplate.fromTemplate(`
     Parse the provided item text into the json schema specified below. The outputted fields should have the same values as the base item provided unless the itemText suggests a clear difference.
 
@@ -26,7 +27,6 @@ export const genFoundryItemFromExample = async (
     SCHEMA AND FORMAT INSTRUCTIONS:
     {formatInstructions}
   `);
-
   // TODO - find a way to keep this in sync with Foundry5eItemSchema
   const systemFieldsToChangeSchema = z.object({
     system: z.object({
@@ -61,6 +61,6 @@ export const genFoundryItemFromExample = async (
 
   // Passthrough fields
   output.img = exampleItem.img;
-
+  console.log(`Item ${output.name} generated, ${timer.timeElapsed()}s elapsed`);
   return output;
 };
