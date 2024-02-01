@@ -25,7 +25,7 @@ class MonsterImporterForm extends FormApplication {
 
   static get defaultOptions() {
     const options = super.defaultOptions;
-    options.title = 'AI Monster Importer';
+    options.title = game.i18n.localize('LLMTCI.MonsterFormTitle');
     options.template = 'modules/llm-text-content-importer/templates/monster_importer_form.hbs';
     options.width = 900;
     options.height = 'auto';
