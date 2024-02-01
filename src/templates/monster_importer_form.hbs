@@ -1,13 +1,13 @@
 <form id="flavorerForm">
   <h1>{{title}}</h1>
   {{#if isLoading}}
-  <p>Loading...</p>
+  <p>{{localize 'LLMTCI.MonsterFormLoadingText'}}</p>
   {{else if invalidAPIKey}}
-  <p class="error-message">Your OpenAI API Key is invalid! Click below to update it</p>
-  <button type="button" id="llmtci-updateAPIKey">Update API Key</button>
+  <p class="error-message">{{localize 'LLMTCI.MonsterFormInvalidAPIKeyMessage'}}</p>
+  <button type="button" id="llmtci-updateAPIKey">{{localize 'LLMTCI.UpdateAPIKeyButton'}}</button>
   {{else}}
   {{! Compendium Selector }}
-  <label for="llmtci-compendiumSelect">Compendium:</label>
+  <label for="llmtci-compendiumSelect">{{localize 'LLMTCI.CompendiumSelectorLabel'}}</label>
   <select id="llmtci-compendiumSelect" class="form-select"=>
     {{#each actorCompendiumOptions}}
     <option value="{{this.name}}" {{#if this.isSelected}}selected{{/if}}>
@@ -16,7 +16,7 @@
     {{/each}}
   </select>
   {{! Model Selector }}
-  <label for="llmtci-modelSelect">Model:</label>
+  <label for="llmtci-modelSelect">{{localize 'LLMTCI.ModelSelectorLabel'}}</label>
   <select id="llmtci-modelSelect" class="form-select">
     {{#each modelOptions}}
     <option value="{{this.name}}" {{#if this.isSelected}}selected{{/if}}>
@@ -25,11 +25,11 @@
     {{/each}}
   </select>
   <div class="flexrow">
-    <label>Monster Stat Block:</label>
+    <label>{{localize 'LLMTCI.MonsterStatBlockLabel'}}</label>
   </div>
   <div class="flexrow">
     <textarea style="height: 200px" id="llmtci-userText" name="promptText"></textarea>
   </div>
-  <button type="submit" id="llmtci-submit">Submit</button>
+  <button type="submit" id="llmtci-submit">{{localize 'LLMTCI.MonsterStatBlockSubmitButton'}}</button>
   {{/if}}
 </form>

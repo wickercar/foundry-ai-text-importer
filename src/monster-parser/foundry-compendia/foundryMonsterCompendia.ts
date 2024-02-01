@@ -1,5 +1,5 @@
 // const saveMonsterToCompendium = async (monster, compendiumName, compendiumLabel) => { };
-export const DEFAULT_MONSTER_COMPENDIUM_LABEL = 'AI Importer Monsters';
+export const DEFAULT_MONSTER_COMPENDIUM_LABEL = game.i18n.localize('LLMTCI.DefaultMonsterCompendiumLabel');
 export const DEFAULT_MONSTER_COMPENDIUM_NAME = 'ai-importer-monsters';
 
 const getCompendiumByName = async (compendiumName: string, packageType = 'world') => {
