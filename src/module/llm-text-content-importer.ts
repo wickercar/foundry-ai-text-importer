@@ -27,9 +27,7 @@ Hooks.on('renderActorDirectory', () => {
     .filter((i, e) => !$(e).has('#llm-text-content-importer-button').length)
     .append(
       `<button id='llm-text-content-importer-button' data-llm-text-content-importer_start><i class='fas fa-scroll-old'></i>&nbsp;${game.i18n.localize(
-        // TODO - fix localization
-        // 'LLMTCI.ActorsDirectoryButton',
-        'AI Monster Importer',
+        'LLMTCI.ActorsDirectoryButton',
       )}</button>`,
     );
   $('[data-llm-text-content-importer_start]').on('click', () => {
