@@ -62,6 +62,23 @@ const registerMonsterCompendiaTests = (quench) => {
           );
           assertMonsterInCompendium(monster, NONEXISTING_TEST_COMPENDIUM_NAME);
         });
+        it('After adding to compendium, items should still be present', async function () {
+          const monster = await createMonster();
+          const item = await Item.create({ name: 'Test Item', type: 'weapon' });
+          monster.items.set(item?.id as string, item as Item, { modifySource: true });
+          await foundryMonsterCompendia.saveAIImportedMonsterToCompendium(
+            monster,
+            EXISTING_TEST_COMPENDIUM_NAME,
+            EXISTING_TEST_COMPENDIUM_LABEL,
+          );
+          const compendium = await foundryMonsterCompendia.getCompendiumByName(EXISTING_TEST_COMPENDIUM_NAME);
+          const index = await compendium?.index;
+          // @ts-ignore (Type for entry is incorrect in foundry-vtt-types - Pick)
+          const entry = index?.find((entry) => entry.name === monster.name);
+          // @ts-ignore (Type for entry is incorrect in foundry-vtt-types - Pick)
+          const monsterFromCompendium = (await compendium?.getDocument(entry?._id)) as Actor;
+          assert.ok(monsterFromCompendium?.items.some((item) => item.name === 'Test Item'));
+        });
       });
     },
     { displayName: 'Testing Monster Compendia Methods' },

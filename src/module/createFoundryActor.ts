@@ -31,7 +31,7 @@ export const createFoundryActor = async (monster: Foundry5eMonster): Promise<Act
   const foundryItems = await createFoundryItems(monster.items);
 
   foundryItems.forEach((item) => {
-    (item.id && monsterActor.items.set(item.id, item, { modifySource: false })) ||
+    (item.id && monsterActor.items.set(item.id, item, { modifySource: true })) ||
       console.error('item.id not present??');
   });
 
