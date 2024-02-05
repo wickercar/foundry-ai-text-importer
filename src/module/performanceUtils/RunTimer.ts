@@ -42,7 +42,7 @@ export default class RunTimer {
       // If RunTimer is running, calculate elapsed time up to current moment
       return (this.elapsedTimeMs + (Date.now() - this.startTime)) / 1000;
     }
-    return this.elapsedTimeMs / 1000;
+    return (this.elapsedTimeMs / 1000) % 1;
   }
 }
 // Usage:

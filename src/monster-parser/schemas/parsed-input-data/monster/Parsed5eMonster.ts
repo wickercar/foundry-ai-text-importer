@@ -130,7 +130,7 @@ export const Parsed5eLLMMonsterSchema = z.object({
         name: z
           .string()
           .describe(
-            `name of the legendary action, usually preceding the description and separated by a period. For example, in "Fear Aura. Any creature hostile...<etc>" the name is "Fear Aura", and the text is the remaining text.`,
+            `name of the action, usually preceding the description and separated by a period. For example, in "Fear Aura. Any creature hostile...<etc>" the name is "Fear Aura", and the text is the remaining text.`,
           ),
         text: z.string(),
       }),
