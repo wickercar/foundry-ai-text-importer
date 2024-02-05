@@ -1,15 +1,15 @@
 import { PromptTemplate } from 'langchain/prompts';
-import OpenAILLM from '../llm/openaillm';
-import { Parsed5eLLMMonster, Parsed5eLLMMonsterSchema } from '../schemas/parsed-input-data/monster/Parsed5eMonster';
+import OpenAILLM from '../../llm/openaillm';
+import { Parsed5eLLMMonster, Parsed5eLLMMonsterSchema } from '../../schemas/parsed-input-data/monster/Parsed5eMonster';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { LLMChain } from 'langchain/chains';
-import RunTimer from '../../module/performanceUtils/RunTimer';
+import RunTimer from '../../../module/performanceUtils/RunTimer';
 
 export const create5eLLMMonsterOutputParser = (): StructuredOutputParser<typeof Parsed5eLLMMonsterSchema> => {
   return StructuredOutputParser.fromZodSchema(Parsed5eLLMMonsterSchema);
 };
 
-export const parse5eMonsterDataFromText = async (text: string): Promise<Parsed5eLLMMonster> => {
+export const parse5eMonsterTextBlockOneCall = async (text: string): Promise<Parsed5eLLMMonster> => {
   const llm = OpenAILLM();
   const timer = RunTimer.getInstance();
   console.log(`Starting to parse monster data from text, ${timer.timeElapsed()}s elapsed`);
