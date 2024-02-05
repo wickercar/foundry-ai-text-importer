@@ -2,6 +2,8 @@ import { z } from 'zod';
 import { Parsed5eMonsterAbilitiesSchema } from './Parsed5eMonsterAbilities';
 import { AlignmentEnumSchema } from '../../enums/Alignment';
 import { EnvironmentEnumSchema } from '../../enums/Environment';
+import { Parsed5eMonsterBasicItemSchema } from './Parsed5eMonsterBasicItem';
+import { Parsed5eMonsterBasicItemArraySchema } from './Parsed5eMonsterBasicItem';
 
 /**
  *
@@ -112,42 +114,7 @@ export const Parsed5eLLMMonsterSchema = z.object({
   //   }),
   // }),
   challengeRating: z.number().describe('challenge rating - whole number from 1 to 20 or fraction between 0 and 1'),
-  specialTraits: z
-    .array(
-      z.object({
-        name: z
-          .string()
-          .describe(
-            `name of the special trait, usually preceding the description and separated by a period. For example, in "Fear Aura. Any creature hostile...<etc>" the name is "Fear Aura", and the text is the remaining text.`,
-          ),
-        text: z.string(),
-      }),
-    )
-    .describe('array of special traits a monster has'),
-  actions: z
-    .array(
-      z.object({
-        name: z
-          .string()
-          .describe(
-            `name of the legendary action, usually preceding the description and separated by a period. For example, in "Fear Aura. Any creature hostile...<etc>" the name is "Fear Aura", and the text is the remaining text.`,
-          ),
-        text: z.string(),
-      }),
-    )
-    .describe('array of Actions a monster has'),
-  legendaryActions: z
-    .array(
-      z.object({
-        name: z
-          .string()
-          .describe(
-            `name of the legendary action, usually preceding the description and separated by a period. For example, in "Fear Aura. Any creature hostile...<etc>" the name is "Fear Aura", and the text is the remaining text.`,
-          ),
-        text: z.string(),
-      }),
-    )
-    .describe('array of Legendary Actions a monster has'),
+  basicItems: Parsed5eMonsterBasicItemArraySchema,
 });
 
 export type Parsed5eLLMMonster = z.infer<typeof Parsed5eLLMMonsterSchema>;

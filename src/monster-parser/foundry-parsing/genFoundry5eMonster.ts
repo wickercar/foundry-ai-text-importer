@@ -60,19 +60,20 @@ class WarfMonsterToFoundryConverter implements Foundry5eMonster {
   items: Foundry5eItem[] = [];
 
   async gen() {
-    const allItemNameAndTexts = [
-      ...this.parsedMonsterData.specialTraits,
-      ...this.parsedMonsterData.actions,
-      ...this.parsedMonsterData.legendaryActions,
-    ];
+    const allBasicItems = this.parsedMonsterData.basicItems;
     const timer = RunTimer.getInstance();
-    console.log(`Starting to generate ${allItemNameAndTexts.length} items, ${timer.timeElapsed()}s elapsed`);
+    console.log(`Starting to generate ${allBasicItems.length} items, ${timer.timeElapsed()}s elapsed`);
+
     const allItems = await Promise.all(
-      allItemNameAndTexts.map(async ({ name, text }) => {
-        const item = await genFoundryItemFromNameAndText({ name, text });
-        return item;
-      }),
+      allBasicItems
+        // 'about' can come through as an item, filter it out. It is caught by the stats call for now.
+        .filter((item) => item.name !== 'about')
+        .map(async ({ name, text, type }) => {
+          const item = await genFoundryItemFromNameAndText({ name, text, type });
+          return item;
+        }),
     );
+
     console.log(`Items generated, ${timer.timeElapsed()}s elapsed`);
     this.items = allItems;
   }
