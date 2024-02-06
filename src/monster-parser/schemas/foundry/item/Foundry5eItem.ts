@@ -2,6 +2,8 @@ import { z } from 'zod';
 import { FoundryMonsterStatsSchema, OwnershipSchema } from '../monster/FoundryMonster';
 import { ActivationTypeEnumSchema } from '../../enums/ActivationType';
 import { ActionTypeEnumSchema } from '../../enums/ActionType';
+import { SavingThrowAbilitiesEnumSchema } from '../../enums/SavingThrowAbilities';
+import { Foundry5eItemDurationSchema } from './Foundry5eItemDuration';
 
 const PriceSchema = z.object({
   value: z.number().default(0),
@@ -43,10 +45,7 @@ export const Foundry5eItemSchema = z.object({
         cost: z.number().default(1),
         condition: z.string().default(''),
       }),
-      duration: z.object({
-        value: z.string(),
-        units: z.string(),
-      }),
+      duration: Foundry5eItemDurationSchema,
       cover: z.number().nullable(),
       target: z.object({
         value: z.number().nullable(),
@@ -61,8 +60,8 @@ export const Foundry5eItemSchema = z.object({
       }),
       uses: z.object({
         value: z.number().nullable(),
-        max: z.string(),
-        per: z.number().nullable(),
+        max: z.string().nullable(),
+        per: z.string().nullable(),
         recovery: z.string(),
       }),
       consume: z.object({
@@ -84,9 +83,9 @@ export const Foundry5eItemSchema = z.object({
       }),
       formula: z.string(),
       save: z.object({
-        ability: z.string(),
+        ability: SavingThrowAbilitiesEnumSchema,
         dc: z.number().nullable(),
-        scaling: z.enum(['spell']),
+        scaling: SavingThrowAbilitiesEnumSchema.or(z.enum(['spell', 'flat'])),
       }),
       type: z
         .object({

@@ -1,28 +1,28 @@
 import { z } from 'zod';
 import { ActivationTypeEnumSchema } from '../../enums/ActivationType';
 import { SavingThrowAbilitiesEnumSchema } from '../../enums/SavingThrowAbilities';
+import { ActionTypeEnumSchema } from '../../enums/ActionType';
 
 /**
  * This includes only the fields we will actually ask for (as opposed to reverting to default), with a simplified structure
  */
 export const Parsed5eItemSchema = z.object({
-  _id: z.string().optional(),
   name: z.string(),
   type: z.enum(['weapon', 'equipment', 'spell', 'feat', 'class', 'subclass']), // these should be the types that apply to monsters but more for PCs
-  // img: z.string(), // Passthrough field from example (or left null)
-  // description: // Passthrough field from BasicItem
   // source: z.string(),
   activation: z.object({
     type: ActivationTypeEnumSchema,
     cost: z.number(),
     condition: z.string().default(''),
   }), // TODO - reexamine adding activation type back, now just passing it through based on how it was identified in the previous step
+  actionType: ActionTypeEnumSchema,
   duration: z
     .object({
-      value: z.string().describe('a number as a string, e.g. "1"'), // TODO - there is a problem with this field, passing it strings like "Instantaneous" causes error
-      units: z.string().describe('e.g. "minute", "hour"'),
+      value: z.string().describe('a number as a string, e.g. "1"').optional(), // TODO - there is a problem with this field, passing it strings like "Instantaneous" causes error
+      units: z.string().describe('e.g. "minute", "hour"').optional(),
     })
-    .describe('Duration - empty unless a duration is explicitly specified'),
+    .describe('Duration - empty unless a duration is explicitly specified')
+    .optional(),
   // cover: z.number().nullable(), // TODO - put back in, don't have any examples right now
   // TODO - chunk range together
   target: z
@@ -47,7 +47,8 @@ export const Parsed5eItemSchema = z.object({
         .describe('the long range of the item (e.g. for "60/120 feet" the value is 120). Exclude if no long range'),
       units: z.string().describe('the units of the range (e.g. for "60/120 feet" the units are "ft")'),
     })
-    .describe('only include if the item has a range'),
+    .optional()
+    .describe('leave fields null if no range is described'),
   uses: z
     .object({
       value: z.number().nullable(),
@@ -78,13 +79,18 @@ export const Parsed5eItemSchema = z.object({
     })
     .describe(
       'if the target must make a saving throw, the ability and DC of the saving throw. E.g. "DC 13 Dexterity saving throw" => {ability: "dex", dc: 13}',
-    ),
-  recharge: z
-    .number()
-    .describe(
-      'only include if "Recharge" is specified. (e.g. "Whirlwind (Recharge 4–6)." => recharge = 4) (e.g. "Recharge 6" => recharge = 5)',
     )
     .optional(),
+  recharge: z
+    .number()
+    .nullable()
+    .describe(
+      'only include if "Recharge" is specified. (e.g. "Whirlwind (Recharge 4–6)." => recharge = 4) (e.g. "Recharge 6" => recharge = 5)',
+    ),
+  // ** Passthrough fields (don't call for these, they get added from example)
+  img: z.string().optional(), // Passthrough field from example (or left null)
+  flags: z.record(z.unknown()).optional(), // Passthrough field from example (or left null)
+  description: z.string(), // Passthrough field from BasicItem
 });
 
 export type Parsed5eItem = z.infer<typeof Parsed5eItemSchema>;
@@ -96,7 +102,6 @@ export type Parsed5eItem = z.infer<typeof Parsed5eItemSchema>;
 //   amount: z.number().nullable(),
 // }), //  TODO - add consume
 // ability: z.string().nullable(), // TODO - can this be parsed from the text? Not sure
-// actionType: ActionTypeEnumSchema, // {'other', 'msak', 'heal', 'mwak', 'abil', 'rwak', 'util', 'rsak', 'save'} // TODO - infer this from other fields?
 // attackBonus: z.string(), // TODO - I THINK (not positive) this is the unseen adjustment to the attack roll - for example, if the monster should be getting +4 from +2 proficiency and +2 strength, but the text reads +2, this is -2
 // chatFlavor: z.string(), // TODO - look at
 // critical: z.object({
