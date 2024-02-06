@@ -1,28 +1,35 @@
 <form id="flavorerForm">
   <h1>{{title}}</h1>
-  {{#if isLoading}}
+  {{#if showProgressView}}
   {{#each tasks}}
   <div class="flexrow">
-    <div class="flexrow flex2">
-      <div class="flex1">
-        <h4 style="margin:0; font-size:medium">{{this.name}}</h4>
-      </div>
-      <p class="flex2">
+    <div class="flex2">
+      <p>
+        <b>{{this.name}}</b>
         {{this.description}}
-        <b style="margin:0;">{{this.timeElapsedString}}</b>
       </p>
+
     </div>
-    {{#if this.isComplete}}
     <div class="flex1">
-      <i class="fas fa-check"></i>
+      <div class="flexrow">
+        {{#if this.isError}}
+        <h4 class="timeElapsedStringError">{{this.timeElapsedString}}</h4>
+        <i class="fas fa-exclamation-triangle"></i>
+        <p class="error-message">{{this.errorMessage}}</p>
+        {{else if this.isComplete}}
+        <h4 class="timeElapsedStringComplete">{{this.timeElapsedString}}</h4>
+        <i class="fas fa-check"></i>
+        {{else}}
+        <h4 class="timeElapsedStringLoading">{{this.timeElapsedString}}</h4>
+        <div class="loader"></div>
+        {{/if}}
+      </div>
     </div>
-    {{else}}
-    <div class="flex1">
-      <div class="loader"></div>
-    </div>
-    {{/if}}
   </div>
   {{/each}}
+  {{#unless isLoading}}
+  <button type="button" id="llmtci-import-another">Import Another!</button>
+  {{/unless}}
   {{else if invalidAPIKey}}
   <p class="error-message">Your OpenAI API Key is invalid! Click below to update it</p>
   <button type="button" id="llmtci-updateAPIKey">Update API Key</button>

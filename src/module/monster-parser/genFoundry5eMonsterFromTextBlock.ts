@@ -8,6 +8,7 @@ import { Foundry5eItem } from './schemas/foundry/item/Foundry5eItem';
 import Foundry5eMonsterFormatter from './foundry-parsing/Foundry5eMonsterFormatter';
 import Parsed5eItemParser from './text-parsing/Parsed5eItemParser/Parsed5eItemParser';
 import Foundry5eItemFormatter from './foundry-parsing/Foundry5eItemFormatter';
+import TaskTracker from '../performanceUtils/TaskTracker';
 
 type MonsterTextBlock5eParsingStrategy =
   | 'ONE_CALL'
@@ -66,14 +67,21 @@ const parseItemWithParsed5eItemSchemaStrategy = async (text: string, inChunks: b
     console.log(`Parsed basic info, ${timer.te()}s elapsed`);
     return basicInfo;
   });
-  const basicItems = await MonsterTextBlock5eParser.toBasicItems(text);
-  const parsedItems = await Parsed5eItemParser.fromBasicItemList(basicItems, inChunks).then((items) => {
+  TaskTracker.startNewTask('Parse Monster Stats', 'Use llm to extract base monster attributes/stats', basicInfoPromise);
+  const basicItemsPromise = MonsterTextBlock5eParser.toBasicItems(text);
+  TaskTracker.startNewTask(
+    'Parse Item Name and Text',
+    'Use llm to extract monster items. Items include actions, reactions, special traits, feats, etc.',
+    basicItemsPromise,
+  );
+  const basicItems = await basicItemsPromise;
+  const parsedItemsPromise = Parsed5eItemParser.fromBasicItemList(basicItems, inChunks).then((items) => {
     console.log(`Generated all foundry items, ${timer.te()}s elapsed`);
     return items;
   });
+  const parsedItems = await parsedItemsPromise;
   const foundryItems = parsedItems.map((item) => Foundry5eItemFormatter.format(item));
   const basicInfo = await basicInfoPromise;
-
   console.log('Generated all foundry info and items, formatting', timer.te(), 's elapsed');
   return Foundry5eMonsterFormatter.format(basicInfo, foundryItems);
 };

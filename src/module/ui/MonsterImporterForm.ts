@@ -35,21 +35,21 @@ class MonsterImporterForm extends FormApplication {
   userText: string;
   isLoading = false;
   isAPIKeyValid = true;
+  showProgressView = false;
   // one-timevalidators
   hasValidatedAPIKey = false;
   hasEnsuredDefaultCompendiumExists = false;
   hasValidatedSelectedCompendium = false;
   keyForm: OpenAIAPIKeyForm;
   // Loading Tasks
-  taskTracker: TaskTracker;
   tickerTimeout: NodeJS.Timeout;
+  // View state
 
   constructor(options) {
     super(options);
     this.userText = '';
     this.checkAPIKey();
     this.keyForm = new OpenAIAPIKeyForm(OpenAIAPIKeyForm.defaultOptions, this.reload);
-    this.taskTracker = new TaskTracker();
   }
 
   reload = async () => {
@@ -73,6 +73,7 @@ class MonsterImporterForm extends FormApplication {
 
   startLoad() {
     this.isLoading = true;
+    this.showProgressView = true;
     // when loading, "tick" to rerender and update the time elapsed
     this.tickerTimeout = setInterval(() => {
       this.render();
@@ -123,6 +124,16 @@ class MonsterImporterForm extends FormApplication {
           game.settings.set('llm-text-content-importer', 'openaiModel', selectedModelId);
         });
     }
+    if (this.showProgressView) {
+      $(html)
+        .find('#llmtci-import-another')
+        .on('click', async (event) => {
+          event.preventDefault();
+          this.showProgressView = false;
+          TaskTracker.clear();
+          this.render();
+        });
+    }
   }
 
   async checkAPIKey(): Promise<void> {
@@ -159,11 +170,12 @@ class MonsterImporterForm extends FormApplication {
       title: this.options.title,
       invalidAPIKey: !this.isAPIKeyValid,
       isLoading: this.isLoading,
+      showProgressView: this.showProgressView,
       // isLoading: true, // TEMP - harcoding to true to test loading spinner
       actorCompendiumOptions: await this.genActorCompendiumOptions(),
       showModelSelector: featureFlags.modelSelector,
       modelOptions: featureFlags.modelSelector ? await this.genModelOptions() : [],
-      tasks: this.taskTracker.tasks,
+      tasks: TaskTracker.tasks,
     };
     return data;
   }
