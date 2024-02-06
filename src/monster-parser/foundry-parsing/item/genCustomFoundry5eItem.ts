@@ -1,10 +1,15 @@
 import RunTimer from '../../../module/performanceUtils/RunTimer';
+import { ActivationType } from '../../schemas/enums/ActivationType';
+import { BasicItemType } from '../../schemas/enums/BasicItemType';
 import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/Foundry5eItem';
+import { Parsed5eMonsterBasicItem } from '../../schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';
 
-export const genCustomFoundryItem = (name: string, text: string): Foundry5eItem => {
+export const genCustomFoundryItem = ({ name, text, type }: Parsed5eMonsterBasicItem): Foundry5eItem => {
   const timer = RunTimer.getInstance();
   console.log(`Generating custom foundry item, ${timer.timeElapsed()}s elapsed`);
   // TODO - this is boilerplate for now, just replacing name and description with name and text. Will want to make it a just holding it here to finish the foundry import piece
+  const activationType = activationTypeFromBasicItemType(type);
+
   const item = Foundry5eItemSchema.parse({
     name,
     type: 'weapon',
@@ -23,7 +28,7 @@ export const genCustomFoundryItem = (name: string, text: string): Foundry5eItem 
       equipped: true,
       rarity: '',
       identified: true,
-      activation: { type: 'action', cost: 1, condition: '' },
+      activation: { type: activationType, cost: 1, condition: '' },
       duration: { value: '', units: '' },
       cover: null,
       target: { value: null, width: null, units: '', type: '' },
@@ -77,6 +82,20 @@ export const genCustomFoundryItem = (name: string, text: string): Foundry5eItem 
     // }
   });
 
-  item.system.description.value = text;
   return item;
+};
+
+const activationTypeFromBasicItemType = (type: BasicItemType): ActivationType => {
+  switch (type) {
+    case 'action':
+      return 'action';
+    case 'reaction':
+      return 'reaction';
+    case 'legendaryAction':
+      return 'legendary';
+    case 'specialTrait':
+      return 'special';
+    default:
+      return 'action';
+  }
 };

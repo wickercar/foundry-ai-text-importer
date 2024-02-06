@@ -20,7 +20,7 @@ import {
   Foundry5eMonsterResources,
   Foundry5eMonsterResourcesSchema,
 } from '../schemas/foundry/monster/Foundry5eMonsterResources';
-import { genFoundryItemFromNameAndText } from './item/genFoundry5eItem';
+import { genFoundryItemFromBasicItem } from './item/genFoundry5eItem';
 import { Foundry5eItem } from '../schemas/foundry/item/Foundry5eItem';
 
 import gargoyleJSON from '../srd/foundry_db_pastes/gargoyle.json';
@@ -60,19 +60,20 @@ class WarfMonsterToFoundryConverter implements Foundry5eMonster {
   items: Foundry5eItem[] = [];
 
   async gen() {
-    const allItemNameAndTexts = [
-      ...this.parsedMonsterData.specialTraits,
-      ...this.parsedMonsterData.actions,
-      ...this.parsedMonsterData.legendaryActions,
-    ];
+    const allBasicItems = this.parsedMonsterData.basicItems;
     const timer = RunTimer.getInstance();
-    console.log(`Starting to generate ${allItemNameAndTexts.length} items, ${timer.timeElapsed()}s elapsed`);
+    console.log(`Starting to generate ${allBasicItems.length} items, ${timer.timeElapsed()}s elapsed`);
+
     const allItems = await Promise.all(
-      allItemNameAndTexts.map(async ({ name, text }) => {
-        const item = await genFoundryItemFromNameAndText({ name, text });
-        return item;
-      }),
+      allBasicItems
+        // 'about' can come through as an item, filter it out. It is caught by the stats call for now.
+        .filter((item) => item.name !== 'about')
+        .map(async (basicItem) => {
+          const item = await genFoundryItemFromBasicItem(basicItem);
+          return item;
+        }),
     );
+
     console.log(`Items generated, ${timer.timeElapsed()}s elapsed`);
     this.items = allItems;
   }
