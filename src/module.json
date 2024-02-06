@@ -33,6 +33,13 @@
       "path": "lang/en.json"
     }
   ],
+  "url": "https://github.com/wickercar/foundry-ai-text-importer",
+  "license": "https://github.com/wickercar/foundry-ai-text-importer/blob/main/LICENSE",
+  "readme": "https://github.com/wickercar/foundry-ai-text-importer/blob/main/README.md",
+  "changelog": "https://github.com/wickercar/foundry-ai-text-importer/blob/main/docs/CHANGELOG.md",
+  "bugs": "https://github.com/wickercar/foundry-ai-text-importer/issues",
+  "manifest": "https://github.com/wickercar/foundry-ai-text-importer/{{name}}/bundle/module.json",
+  "download": "https://github.com/wickercar/foundry-ai-text-importer/{{name}}/bundle/{{name}}.zip",
   "flags": {
     "allowBugReporter": true
   },
