@@ -1,8 +1,7 @@
 {
   "id": "llm-text-content-importer",
-  "title": "LLM Text Content Importer",
-  "description": "Module for importing text-block type content using an LLM",
-  "version": "0.0.2",
+  "title": "AI Monster Importer",
+  "description": "Module for importing monsters into foundry from whatever plaintext source you want! Uses GPT to parse the text and create a monster for you.",
   "compatibility": {
     "minimum": 11,
     "verified": "11.313"
