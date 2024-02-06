@@ -6,6 +6,7 @@ import foundryMonsterCompendia, {
   DEFAULT_MONSTER_COMPENDIUM_NAME,
 } from '../monster-parser/foundry-compendia/FoundryMonsterCompendia';
 import { fetchGPTModels } from '../monster-parser/llm/openaiModels';
+import featureFlags from '../featureFlags';
 
 /**
  * Imports a monster from a single text block using AI
@@ -72,13 +73,15 @@ class MonsterImporterForm extends FormApplication {
         console.log('changing compendium setting to: ', selectedCompendiumName);
         game.settings.set('llm-text-content-importer', 'compendiumImportDestination', selectedCompendiumName);
       });
-    $(html)
-      .find('#llmtci-modelSelect')
-      .on('change', async (event) => {
-        event.preventDefault();
-        const selectedModelId = $(html).find('#llmtci-modelSelect').val();
-        game.settings.set('llm-text-content-importer', 'openaiModel', selectedModelId);
-      });
+    if (featureFlags.modelSelector) {
+      $(html)
+        .find('#llmtci-modelSelect')
+        .on('change', async (event) => {
+          event.preventDefault();
+          const selectedModelId = $(html).find('#llmtci-modelSelect').val();
+          game.settings.set('llm-text-content-importer', 'openaiModel', selectedModelId);
+        });
+    }
   }
 
   async checkAPIKey() {
@@ -123,6 +126,7 @@ class MonsterImporterForm extends FormApplication {
       isLoading: this.isLoading,
       actorCompendiumOptions,
       modelOptions,
+      showModelSelector: featureFlags.modelSelector,
     };
   }
 
