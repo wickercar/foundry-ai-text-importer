@@ -8,7 +8,7 @@ import { ActivationType } from '../../schemas/enums/ActivationType';
 import { Parsed5eMonsterBasicItem } from '../../schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';
 
 // this is very rudimentary for now, just generating a blank item with the same name and description, using an existing item as a template if found
-export const genFoundryItemFromNameAndText = async (basicItem: Parsed5eMonsterBasicItem): Promise<Foundry5eItem> => {
+export const genFoundryItemFromBasicItem = async (basicItem: Parsed5eMonsterBasicItem): Promise<Foundry5eItem> => {
   // TODO - investigate porting over WarfItemToFoundryConverter from server code
 
   const itemWithSameName = await FoundryItemCompendia.findItemWithName(basicItem.name);

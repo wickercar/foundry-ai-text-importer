@@ -20,7 +20,7 @@ import {
   Foundry5eMonsterResources,
   Foundry5eMonsterResourcesSchema,
 } from '../schemas/foundry/monster/Foundry5eMonsterResources';
-import { genFoundryItemFromNameAndText } from './item/genFoundry5eItem';
+import { genFoundryItemFromBasicItem } from './item/genFoundry5eItem';
 import { Foundry5eItem } from '../schemas/foundry/item/Foundry5eItem';
 
 import gargoyleJSON from '../srd/foundry_db_pastes/gargoyle.json';
@@ -68,8 +68,8 @@ class WarfMonsterToFoundryConverter implements Foundry5eMonster {
       allBasicItems
         // 'about' can come through as an item, filter it out. It is caught by the stats call for now.
         .filter((item) => item.name !== 'about')
-        .map(async ({ name, text, type }) => {
-          const item = await genFoundryItemFromNameAndText({ name, text, type });
+        .map(async (basicItem) => {
+          const item = await genFoundryItemFromBasicItem(basicItem);
           return item;
         }),
     );
