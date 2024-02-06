@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { FoundryMonsterStatsSchema, OwnershipSchema } from '../monster/FoundryMonster';
 import { ActivationTypeEnumSchema } from '../../enums/ActivationType';
+import { ActionTypeEnumSchema } from '../../enums/ActionType';
 
 const PriceSchema = z.object({
   value: z.number().default(0),
@@ -70,12 +71,12 @@ export const Foundry5eItemSchema = z.object({
         amount: z.number().nullable(),
       }),
       ability: z.string().nullable(),
-      actionType: z.string(),
+      actionType: ActionTypeEnumSchema,
       attackBonus: z.string(),
       chatFlavor: z.string(),
       critical: z.object({
-        threshold: z.number().nullable(),
-        damage: z.string(),
+        threshold: z.number().nullable().default(null),
+        damage: z.string().default(''),
       }),
       damage: z.object({
         parts: z.array(z.tuple([z.string(), z.string()])),

@@ -26,8 +26,6 @@ export const parse5eMonsterTextBlockToBasicItems = async (text: string): Promise
 
   const outputParser = StructuredOutputParser.fromZodSchema(Parsed5eMonsterBasicItemArraySchema);
 
-  console.log('monster formatInstructions: ', outputParser.getFormatInstructions());
-
   const output = (
     await new LLMChain({
       llm,

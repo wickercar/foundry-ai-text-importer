@@ -3,7 +3,7 @@ import { ActivationTypeEnumSchema } from '../../enums/ActivationType';
 import { BasicItemTypeSchema } from '../../enums/BasicItemType';
 
 export const Parsed5eMonsterBasicItemSchema = z.object({
-  name: z.string(),
+  name: z.string().describe('usually precedes the text (e.g. for input "Bite. The monster makes a bite" => "Bite"'),
   text: z.string(),
   type: BasicItemTypeSchema,
   // .describe(

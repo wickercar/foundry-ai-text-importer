@@ -13,7 +13,8 @@ export const genFoundry5eItemFromExample = async (
 ): Promise<Foundry5eItem> => {
   const llm = OpenAILLM();
   const timer = RunTimer.getInstance();
-  console.log(`Starting to generate item ${name} from example, ${timer.timeElapsed()}s elapsed`);
+  console.log(`Starting to generate item ${basicItem.name} from example, ${timer.timeElapsed()}s elapsed`);
+  console.log('exampleItem: ', exampleItem);
   const prompt = PromptTemplate.fromTemplate(`
     Parse the provided item text into the json schema specified below. The outputted fields should have the same values as the base item provided unless the itemText suggests a clear difference.
 
@@ -27,21 +28,8 @@ export const genFoundry5eItemFromExample = async (
     SCHEMA AND FORMAT INSTRUCTIONS:
     {formatInstructions}
   `);
-  // TODO - find a way to keep this in sync with Foundry5eItemSchema
-  const systemFieldsToChangeSchema = z.object({
-    system: z.object({
-      description: z.object({
-        value: z
-          .string()
-          .describe(
-            'for example, "<section class="secret"><p><em>Melee Weapon Attack:</em><strong>+4 to hit,</strong>, <strong>5 ft.,</strong> one target. Hit: <strong>5 (1d6 + 2) <em>piercing damage</em></strong>.</p><p></p></section><p>The Gargoyle attacks with its Bite.</p>"',
-          ),
-      }),
-    }),
-  });
 
   const outputParser = StructuredOutputParser.fromZodSchema(Foundry5eItemSchema);
-  console.log('item formatInstructions: ', outputParser.getFormatInstructions());
 
   const output = (
     await new LLMChain({
@@ -62,6 +50,12 @@ export const genFoundry5eItemFromExample = async (
 
   // Passthrough fields
   output.img = exampleItem.img;
-  console.log(`Item ${output.name} generated, ${timer.timeElapsed()}s elapsed`);
+
+  output.flags = exampleItem.flags;
+  // TEMP - flag which items are from examples
+  output.system.description.value += `\n\n${exampleItem.name} was generated from an example`;
+
+  console.log(`Item ${output.name} generated from example, ${timer.timeElapsed()}s elapsed`);
+  console.log('item: ', output);
   return output;
 };
