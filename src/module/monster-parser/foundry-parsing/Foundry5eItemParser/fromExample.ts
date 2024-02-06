@@ -1,15 +1,16 @@
 import { PromptTemplate } from 'langchain/prompts';
 import OpenAILLM from '../../llm/openaillm';
-import { Parsed5eItem, Parsed5eItemSchema } from '../../schemas/parsed-input-data/item/Parsed5eItem';
+import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/Foundry5eItem';
+import { z } from 'zod';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { LLMChain } from 'langchain/chains';
-import RunTimer from '../../../module/performanceUtils/RunTimer';
+import RunTimer from '../../../performanceUtils/RunTimer';
 import { Parsed5eMonsterBasicItem } from '../../schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';
 
-export const genParsed5eItemFromExample = async (
+export const genFoundry5eItemFromExample = async (
   basicItem: Parsed5eMonsterBasicItem,
-  exampleItem: Parsed5eItem,
-): Promise<Parsed5eItem> => {
+  exampleItem: Foundry5eItem,
+): Promise<Foundry5eItem> => {
   const llm = OpenAILLM();
   const timer = RunTimer.getInstance();
   console.log(`Starting to generate item ${basicItem.name} from example, ${timer.timeElapsed()}s elapsed`);
@@ -28,7 +29,7 @@ export const genParsed5eItemFromExample = async (
     {formatInstructions}
   `);
 
-  const outputParser = StructuredOutputParser.fromZodSchema(Parsed5eItemSchema);
+  const outputParser = StructuredOutputParser.fromZodSchema(Foundry5eItemSchema);
 
   const output = (
     await new LLMChain({
@@ -49,6 +50,7 @@ export const genParsed5eItemFromExample = async (
 
   // Passthrough fields
   output.img = exampleItem.img;
+
   output.flags = exampleItem.flags;
   // TEMP - flag which items are from examples
   output.system.description.value += `\n\n${exampleItem.name} was generated from an example`;

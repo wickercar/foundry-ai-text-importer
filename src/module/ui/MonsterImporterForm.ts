@@ -1,11 +1,11 @@
 import { OpenAI } from 'langchain/llms/openai';
 import genFoundry5eMonsterActorFromTextBlock from '../genFoundryActorFromMonsterTextBlock';
-import OpenAIAPIKeyStorage from '../../monster-parser/settings/openai-api-key/OpenAIAPIKeyStorage';
-import OpenAIAPIKeyForm from '../../monster-parser/settings/openai-api-key/OpenAIAPIKeyForm';
+import OpenAIAPIKeyStorage from '../monster-parser/settings/openai-api-key/OpenAIAPIKeyStorage';
+import OpenAIAPIKeyForm from '../monster-parser/settings/openai-api-key/OpenAIAPIKeyForm';
 import foundryMonsterCompendia, {
   DEFAULT_MONSTER_COMPENDIUM_NAME,
-} from '../../monster-parser/foundry-compendia/FoundryMonsterCompendia';
-import { fetchGPTModels } from '../../monster-parser/llm/openaiModels';
+} from '../monster-parser/foundry-compendia/FoundryMonsterCompendia';
+import { fetchGPTModels } from '../monster-parser/llm/openaiModels';
 
 /**
  * Imports a monster from a single text block using AI

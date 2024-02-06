@@ -1,5 +1,5 @@
 /* eslint-disable jest/expect-expect, jest/no-export */
-import foundryItemCompendia from '../../monster-parser/foundry-compendia/FoundryItemCompendia';
+import foundryItemCompendia from '../monster-parser/foundry-compendia/FoundryItemCompendia';
 
 const registerExampleItemTests = (quench) => {
   quench.registerBatch(

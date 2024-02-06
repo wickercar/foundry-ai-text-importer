@@ -4,7 +4,7 @@ import {
   Parsed5eMonsterBasicInfoSchema,
 } from '../../schemas/parsed-input-data/monster/Parsed5eMonster';
 import { PromptTemplate } from 'langchain/prompts';
-import RunTimer from '../../../module/performanceUtils/RunTimer';
+import RunTimer from '../../../performanceUtils/RunTimer';
 import OpenAILLM from '../../llm/openaillm';
 import { LLMChain } from 'langchain/chains';
 

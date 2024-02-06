@@ -1,5 +1,5 @@
-import { Foundry5eMonster } from '../monster-parser/schemas/foundry/monster/Foundry5eMonster';
-import { registerSettings } from '../monster-parser/settings/registerSettings';
+import { Foundry5eMonster } from './monster-parser/schemas/foundry/monster/Foundry5eMonster';
+import { registerSettings } from './monster-parser/settings/registerSettings';
 import { createFoundryActor } from './createFoundryActor';
 import registerQuenchTests from './quench/registerQuenchTests';
 import testRatkingWarfOutput from './quench/testRatkingWarfOutput';

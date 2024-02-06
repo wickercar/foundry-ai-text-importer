@@ -1,6 +1,6 @@
 import { Foundry5eMonster } from './schemas/foundry/monster/Foundry5eMonster';
 import genFoundry5eMonster from './foundry-parsing/Foundry5eMonsterFormatter';
-import RunTimer from '../module/performanceUtils/RunTimer';
+import RunTimer from '../performanceUtils/RunTimer';
 import MonsterTextBlock5eParser from './text-parsing/MonsterTextBlock5eParser/MonsterTextBlock5eParser';
 import { Parsed5eLLMMonster } from './schemas/parsed-input-data/monster/Parsed5eMonster';
 import Foundry5eItemParser from './foundry-parsing/Foundry5eItemParser/Foundry5eItemParser';

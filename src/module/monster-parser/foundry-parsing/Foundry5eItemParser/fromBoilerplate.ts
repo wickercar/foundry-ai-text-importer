@@ -1,4 +1,4 @@
-import RunTimer from '../../../module/performanceUtils/RunTimer';
+import RunTimer from '../../../performanceUtils/RunTimer';
 import { ActivationType } from '../../schemas/enums/ActivationType';
 import { BasicItemType } from '../../schemas/enums/BasicItemType';
 import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/Foundry5eItem';
