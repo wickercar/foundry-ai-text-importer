@@ -7,7 +7,22 @@ import foundryMonsterCompendia, {
 } from '../monster-parser/foundry-compendia/FoundryMonsterCompendia';
 import { fetchGPTModels } from '../monster-parser/llm/openaiModels';
 import featureFlags from '../featureFlags';
+import { Data } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/foundry.js/roll';
 
+type DropdownOption = {
+  name: string;
+  label: string;
+  isSelected: boolean;
+};
+
+type FormData = {
+  title: string;
+  invalidAPIKey: boolean;
+  isLoading: boolean;
+  actorCompendiumOptions: DropdownOption[];
+  modelOptions: DropdownOption[];
+  showModelSelector: boolean;
+};
 /**
  * Imports a monster from a single text block using AI
  *
@@ -84,9 +99,11 @@ class MonsterImporterForm extends FormApplication {
     }
   }
 
-  async checkAPIKey() {
+  async checkAPIKey(): Promise<void> {
+    console.log('checking API key');
     this.startLoad();
     const isValid = await OpenAIAPIKeyStorage.isStoredApiKeyValid();
+    console.log('isValid: ', isValid);
     if (!isValid) {
       console.error('Invalid API Key');
       this.isAPIKeyValid = false;
@@ -97,37 +114,47 @@ class MonsterImporterForm extends FormApplication {
   }
 
   async getData(): Promise<any> {
-    await foundryMonsterCompendia.ensureDefaultCompendiumExists();
-    await foundryMonsterCompendia.validateAndMaybeResetSelectedCompendium();
+    const superData = await super.getData();
+    await Promise.all([
+      foundryMonsterCompendia.ensureDefaultCompendiumExists(),
+      foundryMonsterCompendia.validateAndMaybeResetSelectedCompendium(),
+      this.checkAPIKey(),
+    ]);
+    const data = {
+      ...superData,
+      title: this.options.title,
+      invalidAPIKey: !this.isAPIKeyValid,
+      isLoading: this.isLoading,
+      actorCompendiumOptions: await this.genActorCompendiumOptions(),
+      showModelSelector: featureFlags.modelSelector,
+      modelOptions: featureFlags.modelSelector ? await this.genModelOptions() : [],
+    };
+    return data;
+  }
+
+  async genActorCompendiumOptions(): Promise<DropdownOption[]> {
     const actorCompendia = await foundryMonsterCompendia.getAllActorCompendia();
     // Compendium options
     const selectedCompendiumName = game.settings.get('llm-text-content-importer', 'compendiumImportDestination');
-    const actorCompendiumOptions = actorCompendia.map((compendium) => {
+    return actorCompendia.map((compendium) => {
       return {
         name: compendium.metadata.name,
         label: compendium.metadata.label,
         isSelected: selectedCompendiumName === compendium.metadata.name,
       };
     });
-    // LLM model options
-    // TODO - redundant call to models endpoint, also done within validateAndMaybeResetSelectedCompendium
+  }
+
+  async genModelOptions(): Promise<DropdownOption[]> {
     const gptModels = await fetchGPTModels();
     const selectedModelId = game.settings.get('llm-text-content-importer', 'openaiModel');
-    const modelOptions = gptModels.map((model) => {
+    return gptModels.map((model) => {
       return {
         name: model.id,
         label: model.id,
         isSelected: selectedModelId === model.id,
       };
     });
-    return {
-      title: this.options.title,
-      invalidAPIKey: !this.isAPIKeyValid,
-      isLoading: this.isLoading,
-      actorCompendiumOptions,
-      modelOptions,
-      showModelSelector: featureFlags.modelSelector,
-    };
   }
 
   async _updateObject(event: Event, formData): Promise<unknown> {
