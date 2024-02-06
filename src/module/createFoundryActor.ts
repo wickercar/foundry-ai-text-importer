@@ -14,11 +14,8 @@ export const createFoundryActor = async (monster: Foundry5eMonster): Promise<Act
   console.log('creating foundry actor...');
   console.log(monster);
 
-  // temp - adding timestamp to name for easy of use
-  const timeStamp = new Date().getTime();
-
   const monsterActor = await Actor.create({
-    name: monster.name + ` | ${JSON.stringify(timeStamp)}`,
+    name: monster.name,
     type: 'npc',
   });
 
