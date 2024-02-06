@@ -10,6 +10,7 @@ import { LLMChain } from 'langchain/chains';
 export const genCustomParsed5eItemFromBasicItem = async (
   basicItem: Parsed5eMonsterBasicItem,
   useChunks = false,
+  img: string | undefined = undefined,
 ): Promise<Parsed5eItem> => {
   const timer = RunTimer.getInstance();
   console.log(`Generating custom parsed item ${basicItem.name}, ${timer.timeElapsed()}s elapsed`);
@@ -17,12 +18,15 @@ export const genCustomParsed5eItemFromBasicItem = async (
 
   // "Chunks" strategy
   if (useChunks) {
-    return parseInChunks(basicItem);
+    return parseInChunks(basicItem, img);
   }
-  return parseInOneCall(basicItem);
+  return parseInOneCall(basicItem, img);
 };
 
-const parseInOneCall = async (basicItem: Parsed5eMonsterBasicItem): Promise<Parsed5eItem> => {
+const parseInOneCall = async (
+  basicItem: Parsed5eMonsterBasicItem,
+  img: string | undefined = undefined,
+): Promise<Parsed5eItem> => {
   const llm = OpenAILLM();
   const timer = RunTimer.getInstance();
 
@@ -55,11 +59,16 @@ const parseInOneCall = async (basicItem: Parsed5eMonsterBasicItem): Promise<Pars
   // Remove fields that cause issues
   delete output._id;
   output.effects = [];
+  // passthrough fields
+  output.img = img;
   console.log('Parsed item in one call: ', basicItem.name, basicItem.text, timer.timeElapsed(), 's elapsed');
   return output;
 };
 
-const parseInChunks = async (basicItem: Parsed5eMonsterBasicItem): Promise<Parsed5eItem> => {
+const parseInChunks = async (
+  basicItem: Parsed5eMonsterBasicItem,
+  img: string | undefined = undefined,
+): Promise<Parsed5eItem> => {
   const llm = OpenAILLM('gpt-4');
   const timer = RunTimer.getInstance();
 
@@ -107,7 +116,7 @@ const parseInChunks = async (basicItem: Parsed5eMonsterBasicItem): Promise<Parse
   const item: Parsed5eItem = chunkResults.reduce((acc, chunk) => {
     return { ...acc, ...chunk };
   }, {}) as Parsed5eItem;
-
+  item.img = img;
   console.log(`Item ${item.name} generated from scratch by chunking, ${timer.timeElapsed()}s elapsed`);
   console.log('item: ', item);
 
