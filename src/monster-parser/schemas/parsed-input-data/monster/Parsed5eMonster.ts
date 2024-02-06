@@ -13,7 +13,7 @@ export const Parsed5eMonsterBasicInfoSchema = z.object({
     value: z.number(),
     // TODO - make this enum better
     type: z.enum(['natural', 'armored']),
-    formula: z.string().describe('e.g. "2d6+2"').default(''),
+    formula: z.string().describe('formula for calculating armor, e.g. "2d6+2"').default(''),
   }),
   xp: z.number().describe('experience points'),
   initiativeSkillCheck: z.object({

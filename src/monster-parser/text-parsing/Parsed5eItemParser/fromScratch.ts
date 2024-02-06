@@ -14,7 +14,54 @@ export const genCustomParsed5eItemFromBasicItem = async (
   const timer = RunTimer.getInstance();
   console.log(`Generating custom parsed item ${basicItem.name}, ${timer.timeElapsed()}s elapsed`);
   // Using "chunks" strategy to generate the item from scratch
+
+  // "Chunks" strategy
+  if (useChunks) {
+    return parseInChunks(basicItem);
+  }
+  return parseInOneCall(basicItem);
+};
+
+const parseInOneCall = async (basicItem: Parsed5eMonsterBasicItem): Promise<Parsed5eItem> => {
+  const llm = OpenAILLM();
+  const timer = RunTimer.getInstance();
+
+  console.log('parsing item in one call: ', basicItem.name, basicItem.text, timer.timeElapsed(), 's elapsed');
+
+  const prompt = PromptTemplate.fromTemplate(`
+    Parse the provided item text into the json schema specified below.
+
+    TEXT TO PARSE:
+    {itemName}
+    {itemText}
+
+    SCHEMA AND FORMAT INSTRUCTIONS:
+    {formatInstructions}
+  `);
+
+  const outputParser = StructuredOutputParser.fromZodSchema(Parsed5eItemSchema);
+
+  const output = (
+    await new LLMChain({
+      llm,
+      prompt,
+      outputParser,
+    }).invoke({
+      formatInstructions: outputParser.getFormatInstructions(),
+      itemName: basicItem.name,
+      itemText: basicItem.text,
+    })
+  ).text;
+  // Remove fields that cause issues
+  delete output._id;
+  output.effects = [];
+  console.log('Parsed item in one call: ', basicItem.name, basicItem.text, timer.timeElapsed(), 's elapsed');
+  return output;
+};
+
+const parseInChunks = async (basicItem: Parsed5eMonsterBasicItem): Promise<Parsed5eItem> => {
   const llm = OpenAILLM('gpt-4');
+  const timer = RunTimer.getInstance();
 
   const prompt = PromptTemplate.fromTemplate(`
     Parse the provided item text into the json schema specified below.
@@ -46,16 +93,12 @@ export const genCustomParsed5eItemFromBasicItem = async (
             itemText: basicItem.text,
           })
         ).text;
-
-        console.log('chunk input: ', chunk);
-        console.log('output from chunk: ', output);
         // Remove fields that cause issues
         delete output._id;
         output.effects = [];
         return output;
       } catch (e) {
         console.error('Error validating chunk: ', e);
-        console.log('format Instructions: ', outputParser.getFormatInstructions());
         return {};
       }
     }),
@@ -68,8 +111,5 @@ export const genCustomParsed5eItemFromBasicItem = async (
   console.log(`Item ${item.name} generated from scratch by chunking, ${timer.timeElapsed()}s elapsed`);
   console.log('item: ', item);
 
-  // "Chunks" strategy
-
-  // TODO - dummy return statement
   return item;
 };

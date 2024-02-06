@@ -9,11 +9,15 @@ import Foundry5eMonsterFormatter from './foundry-parsing/Foundry5eMonsterFormatt
 import Parsed5eItemParser from './text-parsing/Parsed5eItemParser/Parsed5eItemParser';
 import Foundry5eItemFormatter from './foundry-parsing/Foundry5eItemFormatter';
 
-type MonsterTextBlock5eParsingStrategy = 'ONE_CALL' | 'SEPARATE_ITEMS_AND_STATS' | 'PARSE_ITEMS_IN_CHUNKS';
+type MonsterTextBlock5eParsingStrategy =
+  | 'ONE_CALL'
+  | 'SEPARATE_ITEMS_AND_STATS'
+  | 'SMALL_SCHEMA_IN_CHUNKS'
+  | 'SMALL_SCHEMA_NO_CHUNKS';
 
 export const genFoundry5eMonsterFromTextBlock = async (
   text: string,
-  strategy: MonsterTextBlock5eParsingStrategy = 'PARSE_ITEMS_IN_CHUNKS',
+  strategy: MonsterTextBlock5eParsingStrategy = 'SMALL_SCHEMA_NO_CHUNKS',
 ): Promise<Foundry5eMonster> => {
   const timer = RunTimer.getInstance();
   console.log(`Generating monster from text block with strategy ${strategy}, ${timer.timeElapsed()}s elapsed`);
@@ -22,10 +26,12 @@ export const genFoundry5eMonsterFromTextBlock = async (
       return await oneCallStrategy(text);
     case 'SEPARATE_ITEMS_AND_STATS':
       return await separateItemsAndStatsStrategy(text);
-    case 'PARSE_ITEMS_IN_CHUNKS':
-      return await parseItemInChunksStrategy(text);
+    case 'SMALL_SCHEMA_IN_CHUNKS':
+      return await parseItemWithParsed5eItemSchemaStrategy(text, true);
+    case 'SMALL_SCHEMA_NO_CHUNKS':
+      return await parseItemWithParsed5eItemSchemaStrategy(text, false);
     default:
-      throw new Error(`Invalid Text Parsing strateg paramy: ${strategy}`);
+      throw new Error(`Invalid Text Parsing strategy param: ${strategy}`);
   }
 };
 
@@ -54,14 +60,14 @@ const separateItemsAndStatsStrategy = async (text: string): Promise<Foundry5eMon
   return Foundry5eMonsterFormatter.format(basicInfo, foundryItems);
 };
 
-const parseItemInChunksStrategy = async (text: string): Promise<Foundry5eMonster> => {
+const parseItemWithParsed5eItemSchemaStrategy = async (text: string, inChunks: boolean): Promise<Foundry5eMonster> => {
   const timer = RunTimer.inst();
   const basicInfoPromise = MonsterTextBlock5eParser.toBasicInfo(text).then((basicInfo) => {
     console.log(`Parsed basic info, ${timer.te()}s elapsed`);
     return basicInfo;
   });
   const basicItems = await MonsterTextBlock5eParser.toBasicItems(text);
-  const parsedItems = await Parsed5eItemParser.fromBasicItemList(basicItems).then((items) => {
+  const parsedItems = await Parsed5eItemParser.fromBasicItemList(basicItems, inChunks).then((items) => {
     console.log(`Generated all foundry items, ${timer.te()}s elapsed`);
     return items;
   });
