@@ -108,8 +108,6 @@ class MonsterImporterForm extends FormApplication {
   }
 
   async checkAPIKey(): Promise<void> {
-    console.log('checking API key');
-    this.startLoad();
     const isValid = await OpenAIAPIKeyStorage.isStoredApiKeyValid();
     console.log('isValid: ', isValid);
     if (!isValid) {
@@ -118,7 +116,6 @@ class MonsterImporterForm extends FormApplication {
     } else {
       this.isAPIKeyValid = true;
     }
-    this.endLoad();
   }
 
   async getData(): Promise<any> {

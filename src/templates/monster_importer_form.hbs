@@ -2,6 +2,7 @@
   <h1>{{title}}</h1>
   {{#if isLoading}}
   <p>Loading...</p>
+  <div class="loader"></div>
   {{else if invalidAPIKey}}
   <p class="error-message">Your OpenAI API Key is invalid! Click below to update it</p>
   <button type="button" id="llmtci-updateAPIKey">Update API Key</button>
