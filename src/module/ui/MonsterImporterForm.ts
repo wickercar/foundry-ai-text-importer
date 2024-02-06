@@ -50,6 +50,8 @@ class MonsterImporterForm extends FormApplication {
     this.userText = '';
     this.checkAPIKey();
     this.keyForm = new OpenAIAPIKeyForm(OpenAIAPIKeyForm.defaultOptions, this.reload);
+    // Not the best place for this, I want to decouple this from MonsterImporterForm
+    TaskTracker.clear();
   }
 
   reload = async () => {
