@@ -4,7 +4,7 @@ import OpenAIAPIKeyStorage from '../../monster-parser/settings/openai-api-key/Op
 import OpenAIAPIKeyForm from '../../monster-parser/settings/openai-api-key/OpenAIAPIKeyForm';
 import foundryMonsterCompendia, {
   DEFAULT_MONSTER_COMPENDIUM_NAME,
-} from '../../monster-parser/foundry-compendia/foundryMonsterCompendia';
+} from '../../monster-parser/foundry-compendia/FoundryMonsterCompendia';
 import { fetchGPTModels } from '../../monster-parser/llm/openaiModels';
 
 /**

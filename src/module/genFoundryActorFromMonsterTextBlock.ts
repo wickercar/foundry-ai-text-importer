@@ -1,4 +1,4 @@
-import foundryMonsterCompendia from '../monster-parser/foundry-compendia/foundryMonsterCompendia';
+import foundryMonsterCompendia from '../monster-parser/foundry-compendia/FoundryMonsterCompendia';
 import { genFoundry5eMonsterFromTextBlock } from '../monster-parser/genFoundry5eMonsterFromTextBlock';
 import { createFoundryActor } from './createFoundryActor';
 import RunTimer from './performanceUtils/RunTimer';

@@ -9,7 +9,7 @@ export const create5eLLMMonsterOutputParser = (): StructuredOutputParser<typeof 
   return StructuredOutputParser.fromZodSchema(Parsed5eLLMMonsterSchema);
 };
 
-export const parse5eMonsterTextBlockOneCall = async (text: string): Promise<Parsed5eLLMMonster> => {
+export const parseMonsterTextBlockTo5eMonster = async (text: string): Promise<Parsed5eLLMMonster> => {
   const llm = OpenAILLM();
   const timer = RunTimer.getInstance();
   console.log(`Starting to parse monster data from text, ${timer.timeElapsed()}s elapsed`);

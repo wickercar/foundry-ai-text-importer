@@ -5,11 +5,11 @@ import { z } from 'zod';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { LLMChain } from 'langchain/chains';
 import RunTimer from '../../../module/performanceUtils/RunTimer';
+import { Parsed5eMonsterBasicItem } from '../../schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';
 
-export const genFoundryItemFromExample = async (
+export const genFoundry5eItemFromExample = async (
+  basicItem: Parsed5eMonsterBasicItem,
   exampleItem: Foundry5eItem,
-  name: string,
-  text: string,
 ): Promise<Foundry5eItem> => {
   const llm = OpenAILLM();
   const timer = RunTimer.getInstance();
@@ -50,8 +50,8 @@ export const genFoundryItemFromExample = async (
       outputParser,
     }).invoke({
       formatInstructions: outputParser.getFormatInstructions(),
-      itemName: name,
-      itemText: text,
+      itemName: basicItem.name,
+      itemText: basicItem.text,
       exampleItem: exampleItem,
     })
   ).text;

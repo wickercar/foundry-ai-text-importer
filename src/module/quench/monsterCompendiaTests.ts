@@ -2,7 +2,7 @@
 /* eslint-disable jest/expect-expect, jest/no-export */
 import foundryMonsterCompendia, {
   DEFAULT_MONSTER_COMPENDIUM_NAME,
-} from '../../monster-parser/foundry-compendia/foundryMonsterCompendia';
+} from '../../monster-parser/foundry-compendia/FoundryMonsterCompendia';
 
 const EXISTING_TEST_COMPENDIUM_LABEL = 'Test Custom Monster Compendium';
 const EXISTING_TEST_COMPENDIUM_NAME = 'test-custom-monster-compendium';

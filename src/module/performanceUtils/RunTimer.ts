@@ -20,6 +20,10 @@ export default class RunTimer {
     return RunTimer.instance;
   }
 
+  public static inst(): RunTimer {
+    return RunTimer.getInstance();
+  }
+
   // Start the RunTimer
   public start(): void {
     if (this.startTime === null) {
@@ -43,6 +47,10 @@ export default class RunTimer {
       return (this.elapsedTimeMs + (Date.now() - this.startTime)) / 1000;
     }
     return (this.elapsedTimeMs / 1000) % 1;
+  }
+
+  public te(): number {
+    return this.timeElapsed();
   }
 }
 // Usage:

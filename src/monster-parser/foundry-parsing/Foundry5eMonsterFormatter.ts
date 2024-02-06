@@ -1,4 +1,4 @@
-import { Parsed5eLLMMonster } from '../schemas/parsed-input-data/monster/Parsed5eMonster';
+import { Parsed5eMonsterBasicInfo } from '../schemas/parsed-input-data/monster/Parsed5eMonster';
 import type { Foundry5eMonster } from '../schemas/foundry/monster/Foundry5eMonster';
 import { Foundry5eMonsterAttributes } from '../schemas/foundry/monster/Foundry5eMonsterAttributes';
 import { Foundry5eMonsterDetails } from '../schemas/foundry/monster/Foundry5eMonsterDetails';
@@ -20,65 +20,53 @@ import {
   Foundry5eMonsterResources,
   Foundry5eMonsterResourcesSchema,
 } from '../schemas/foundry/monster/Foundry5eMonsterResources';
-import { genFoundryItemFromBasicItem } from './item/genFoundry5eItem';
 import { Foundry5eItem } from '../schemas/foundry/item/Foundry5eItem';
 
 import gargoyleJSON from '../srd/foundry_db_pastes/gargoyle.json';
 import { sizeToFoundrySize } from '../schemas/enums/Size';
-import RunTimer from '../../module/performanceUtils/RunTimer';
 
-const genFoundry5eMonster = async (parsedMonsterData: Parsed5eLLMMonster): Promise<Foundry5eMonster> => {
-  const converter = new WarfMonsterToFoundryConverter(parsedMonsterData);
+export default class Foundry5eMonsterFormatter implements Foundry5eMonster {
+  private basicInfo: Parsed5eMonsterBasicInfo;
+  private foundryItems: Foundry5eItem[];
 
-  // must call gen before returning
-  await converter.gen();
-
-  return {
-    name: converter.name,
-    items: converter.items,
-    system: converter.system,
-    // _stats: converter._stats,
-    type: converter.type,
-    img: converter.img,
-    effects: converter.effects,
-    // TODO - update folder for compendium?
-    folder: converter.folder,
-    sort: converter.sort,
-    ownership: {
-      default: 0,
-    },
-    flags: {},
-    _id: '',
-  };
-};
-
-class WarfMonsterToFoundryConverter implements Foundry5eMonster {
-  constructor(parsedMonsterData: Parsed5eLLMMonster) {
-    this.parsedMonsterData = parsedMonsterData;
+  constructor(basicInfo: Parsed5eMonsterBasicInfo, foundryItems: Foundry5eItem[]) {
+    this.basicInfo = basicInfo;
+    this.foundryItems = foundryItems;
   }
 
-  items: Foundry5eItem[] = [];
-
-  async gen() {
-    const allBasicItems = this.parsedMonsterData.basicItems;
-    const timer = RunTimer.getInstance();
-    console.log(`Starting to generate ${allBasicItems.length} items, ${timer.timeElapsed()}s elapsed`);
-
-    const allItems = await Promise.all(
-      allBasicItems
-        // 'about' can come through as an item, filter it out. It is caught by the stats call for now.
-        .filter((item) => item.name !== 'about')
-        .map(async (basicItem) => {
-          const item = await genFoundryItemFromBasicItem(basicItem);
-          return item;
-        }),
-    );
-
-    console.log(`Items generated, ${timer.timeElapsed()}s elapsed`);
-    this.items = allItems;
+  /**
+   * Format the basic info and foundry items into a Foundry5eMonster
+   * (Items must already be formatted for foundry)
+   *
+   * @param basicInfo
+   * @param foundryItems
+   * @returns
+   */
+  static format(basicInfo: Parsed5eMonsterBasicInfo, foundryItems: Foundry5eItem[]): Foundry5eMonster {
+    const formatter = new Foundry5eMonsterFormatter(basicInfo, foundryItems);
+    // must call gen before returning
+    return {
+      name: formatter.name,
+      items: formatter.items,
+      system: formatter.system,
+      // _stats: formatter._stats,
+      type: formatter.type,
+      img: formatter.img,
+      effects: formatter.effects,
+      // TODO - update folder for compendium?
+      folder: formatter.folder,
+      sort: formatter.sort,
+      ownership: {
+        default: 0,
+      },
+      flags: {},
+      _id: '',
+    };
   }
 
-  private parsedMonsterData: Parsed5eLLMMonster;
+  get items(): Foundry5eItem[] {
+    return this.foundryItems;
+  }
 
   get system() {
     return {
@@ -104,26 +92,26 @@ class WarfMonsterToFoundryConverter implements Foundry5eMonster {
   _id = '';
 
   get name(): string {
-    return this.parsedMonsterData.name;
+    return this.basicInfo.name;
   }
 
   get abilities() {
     // Schemas here are identical (with optional fields in warf version)
-    return this.parsedMonsterData.abilities;
+    return this.basicInfo.abilities;
   }
 
   get attributes(): Foundry5eMonsterAttributes {
-    const { parsedMonsterData } = this;
+    const { basicInfo } = this;
     return {
       ac: {
-        flat: parsedMonsterData.armorClass.value,
-        calc: parsedMonsterData.armorClass.type,
-        formula: parsedMonsterData.armorClass.formula,
+        flat: basicInfo.armorClass.value,
+        calc: basicInfo.armorClass.type,
+        formula: basicInfo.armorClass.formula,
       },
       hp: {
-        value: parsedMonsterData.hitPoints.average,
-        max: parsedMonsterData.hitPoints.average,
-        formula: parsedMonsterData.hitPoints.formula,
+        value: basicInfo.hitPoints.average,
+        max: basicInfo.hitPoints.average,
+        formula: basicInfo.hitPoints.formula,
       },
       // TODO
       init: {
@@ -131,15 +119,15 @@ class WarfMonsterToFoundryConverter implements Foundry5eMonster {
         bonus: '',
       },
       movement: {
-        ...parsedMonsterData.movementSpeed,
-        hover: parsedMonsterData.hover,
+        ...basicInfo.movementSpeed,
+        hover: basicInfo.hover,
         units: 'ft',
       },
       attunement: {
         max: 0,
       },
       senses: {
-        ...parsedMonsterData.senses,
+        ...basicInfo.senses,
         units: 'ft',
         special: '',
       },
@@ -149,21 +137,21 @@ class WarfMonsterToFoundryConverter implements Foundry5eMonster {
 
   get details(): Foundry5eMonsterDetails {
     return {
-      alignment: this.parsedMonsterData.alignment,
+      alignment: this.basicInfo.alignment,
       type: {
-        value: this.parsedMonsterData.type,
-        subtype: this.parsedMonsterData.subtype,
-        swarm: this.parsedMonsterData.isASwarm ? 'tiny' : '',
+        value: this.basicInfo.type,
+        subtype: this.basicInfo.subtype,
+        swarm: this.basicInfo.isASwarm ? 'tiny' : '',
         custom: '',
       },
-      cr: this.parsedMonsterData.challengeRating,
+      cr: this.basicInfo.challengeRating,
       source: 'AI Monster Importer',
       biography: {
-        value: this.parsedMonsterData.biography,
-        public: this.parsedMonsterData.biography,
+        value: this.basicInfo.biography,
+        public: this.basicInfo.biography,
       },
-      race: this.parsedMonsterData.race,
-      environment: this.parsedMonsterData.environment,
+      race: this.basicInfo.race,
+      environment: this.basicInfo.environment,
       spellLevel: 0,
     };
   }
@@ -171,28 +159,28 @@ class WarfMonsterToFoundryConverter implements Foundry5eMonster {
   get traits(): Foundry5eMonsterTraits {
     // TODO - handle bypasses
     return {
-      size: sizeToFoundrySize(this.parsedMonsterData.size),
+      size: sizeToFoundrySize(this.basicInfo.size),
       di: {
-        value: this.parsedMonsterData.damageImmunities,
+        value: this.basicInfo.damageImmunities,
         bypasses: [],
         custom: '',
       },
       dr: {
-        value: this.parsedMonsterData.damageResistances,
+        value: this.basicInfo.damageResistances,
         bypasses: [],
         custom: '',
       },
       dv: {
-        value: this.parsedMonsterData.damageVulnerabilities,
+        value: this.basicInfo.damageVulnerabilities,
         bypasses: [],
         custom: '',
       },
       ci: {
-        value: this.parsedMonsterData.conditionImmunities,
+        value: this.basicInfo.conditionImmunities,
         custom: '',
       },
       languages: {
-        value: this.parsedMonsterData.languages,
+        value: this.basicInfo.languages,
         custom: '',
       },
     };
@@ -231,10 +219,10 @@ class WarfMonsterToFoundryConverter implements Foundry5eMonster {
       // Add other mappings as necessary
     };
 
-    console.log('this.parsedMonsterData.skills: ', this.parsedMonsterData.skills);
+    console.log('this.basicInfo.skills: ', this.basicInfo.skills);
 
     const foundrySkills = {};
-    this.parsedMonsterData.skills.forEach((skill) => {
+    this.basicInfo.skills.forEach((skill) => {
       const skillAbbreviation = skillMapping[skill.name];
       if (!skillAbbreviation) return;
 
@@ -272,5 +260,3 @@ class WarfMonsterToFoundryConverter implements Foundry5eMonster {
   //   return FoundryMonsterStatsSchema.parse(gargoyleJSON._stats);
   // }
 }
-
-export default genFoundry5eMonster;

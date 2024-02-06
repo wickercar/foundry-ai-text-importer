@@ -4,9 +4,9 @@ import { BasicItemType } from '../../schemas/enums/BasicItemType';
 import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/Foundry5eItem';
 import { Parsed5eMonsterBasicItem } from '../../schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';
 
-export const genCustomFoundryItem = ({ name, text, type }: Parsed5eMonsterBasicItem): Foundry5eItem => {
+export const genCustomFoundry5eItemFromBasicItem = ({ name, text, type }: Parsed5eMonsterBasicItem): Foundry5eItem => {
   const timer = RunTimer.getInstance();
-  console.log(`Generating custom foundry item, ${timer.timeElapsed()}s elapsed`);
+  console.log(`Generating custom foundry item ${name}, ${timer.timeElapsed()}s elapsed`);
   // TODO - this is boilerplate for now, just replacing name and description with name and text. Will want to make it a just holding it here to finish the foundry import piece
   const activationType = activationTypeFromBasicItemType(type);
 
@@ -82,6 +82,7 @@ export const genCustomFoundryItem = ({ name, text, type }: Parsed5eMonsterBasicI
     // }
   });
 
+  console.log(`Generated custom foundry item ${name}, ${RunTimer.inst().te()}s elapsed`);
   return item;
 };
 

@@ -5,12 +5,7 @@ import { EnvironmentEnumSchema } from '../../enums/Environment';
 import { Parsed5eMonsterBasicItemSchema } from './Parsed5eMonsterBasicItem';
 import { Parsed5eMonsterBasicItemArraySchema } from './Parsed5eMonsterBasicItem';
 
-/**
- *
- * The schema that will be returned by the llm
- */
-// TODO - sync these enums with other schemas
-export const Parsed5eLLMMonsterSchema = z.object({
+export const Parsed5eMonsterBasicInfoSchema = z.object({
   name: z.string(),
   alignment: AlignmentEnumSchema,
   abilities: Parsed5eMonsterAbilitiesSchema,
@@ -114,6 +109,16 @@ export const Parsed5eLLMMonsterSchema = z.object({
   //   }),
   // }),
   challengeRating: z.number().describe('challenge rating - whole number from 1 to 20 or fraction between 0 and 1'),
+});
+
+export type Parsed5eMonsterBasicInfo = z.infer<typeof Parsed5eMonsterBasicInfoSchema>;
+
+/**
+ *
+ * The schema that will be returned by the llm
+ */
+// TODO - sync these enums with other schemas
+export const Parsed5eLLMMonsterSchema = Parsed5eMonsterBasicInfoSchema.extend({
   basicItems: Parsed5eMonsterBasicItemArraySchema,
 });
 

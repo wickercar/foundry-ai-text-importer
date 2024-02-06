@@ -18,3 +18,4 @@ export const Parsed5eMonsterBasicItemArraySchema = z.array(Parsed5eMonsterBasicI
 `);
 
 export type Parsed5eMonsterBasicItem = z.infer<typeof Parsed5eMonsterBasicItemSchema>;
+export type Parsed5eMonsterBasicItemArray = z.infer<typeof Parsed5eMonsterBasicItemArraySchema>;

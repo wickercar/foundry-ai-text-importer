@@ -1,6 +1,6 @@
 /* eslint-disable jest/no-export, jest/expect-expect  */
 
-import { create5eLLMMonsterOutputParser } from '../../monster-parser/text-parsing/MonsterTextBlock5eParser/parseOneCall';
+import { create5eLLMMonsterOutputParser } from '../../monster-parser/text-parsing/MonsterTextBlock5eParser/parseToBasicMonster';
 
 const registerFormatInstructionsTests = (quench) => {
   quench.registerBatch('quench.format-instructions', (context) => {
