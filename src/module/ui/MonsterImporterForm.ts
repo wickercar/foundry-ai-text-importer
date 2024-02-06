@@ -32,7 +32,13 @@ class MonsterImporterForm extends FormApplication {
   userText: string;
   isLoading = false;
   isAPIKeyValid = true;
+  // one-timevalidators
+  hasValidatedAPIKey = false;
+  hasEnsuredDefaultCompendiumExists = false;
+  hasValidatedSelectedCompendium = false;
   keyForm: OpenAIAPIKeyForm;
+  // Loading Tasks
+  taskTracker: TaskTracker;
 
   constructor(options) {
     super(options);
@@ -42,6 +48,9 @@ class MonsterImporterForm extends FormApplication {
   }
 
   reload = async () => {
+    this.hasValidatedAPIKey = false; // re-validate API key
+    this.hasEnsuredDefaultCompendiumExists = false;
+    this.hasValidatedSelectedCompendium = false;
     this.render();
     await this.keyForm.close({ force: true });
   };
@@ -120,16 +129,28 @@ class MonsterImporterForm extends FormApplication {
 
   async getData(): Promise<any> {
     const superData = await super.getData();
-    await Promise.all([
-      foundryMonsterCompendia.ensureDefaultCompendiumExists(),
-      foundryMonsterCompendia.validateAndMaybeResetSelectedCompendium(),
-      this.checkAPIKey(),
-    ]);
+
+    const validators: Promise<any>[] = [];
+    if (!this.hasValidatedAPIKey) {
+      validators.push(this.checkAPIKey());
+      this.hasValidatedAPIKey = true;
+    }
+    if (!this.hasEnsuredDefaultCompendiumExists) {
+      validators.push(foundryMonsterCompendia.ensureDefaultCompendiumExists());
+      this.hasEnsuredDefaultCompendiumExists = true;
+    }
+    if (!this.hasValidatedSelectedCompendium) {
+      validators.push(foundryMonsterCompendia.validateAndMaybeResetSelectedCompendium());
+      this.hasValidatedSelectedCompendium = true;
+    }
+
+    await Promise.all(validators);
     const data = {
       ...superData,
       title: this.options.title,
       invalidAPIKey: !this.isAPIKeyValid,
-      isLoading: this.isLoading,
+      // isLoading: this.isLoading,
+      isLoading: true, // TEMP - harcoding to true to test loading spinner
       actorCompendiumOptions: await this.genActorCompendiumOptions(),
       showModelSelector: featureFlags.modelSelector,
       modelOptions: featureFlags.modelSelector ? await this.genModelOptions() : [],
