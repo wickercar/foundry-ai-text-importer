@@ -32,7 +32,8 @@ jobs:
       - run: npm ci --cache .npm --prefer-offline
 
       - run: npm run build
-        allowEmpty: true
+        with:
+          allowEmpty: true
 
       # Get the version from built 'module.json'
       - name: Get Version
