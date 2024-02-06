@@ -16,5 +16,6 @@ Here is a short video demo where I import an [Infernal Centaur](https://www.5esr
 Thats it!
 
 - After parsing your monster, the actor sheet will pop up and display the goods.
+- You can select a compendium to send your monsters to - a default one will be created if you don't!
 - While parsing, you'll see a breakdown of the different processes as they start and end.
 - Click "Import Another" and keep going!
