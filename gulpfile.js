@@ -15,7 +15,8 @@ const semver = require('semver');
 /*  CONFIGURATION   */
 /********************/
 
-const name = path.basename(path.resolve('.'));
+const name = 'llm-text-content-importer';
+console.log('name: (path.basename)', name);
 const sourceDirectory = './src';
 const distDirectory = './dist';
 const stylesDirectory = `${sourceDirectory}/styles`;
