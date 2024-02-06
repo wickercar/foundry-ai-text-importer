@@ -2,7 +2,7 @@
   "id": "llm-text-content-importer",
   "title": "LLM Text Content Importer",
   "description": "Module for importing text-block type content using an LLM",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "compatibility": {
     "minimum": 11,
     "verified": "11.313"
