@@ -4,6 +4,7 @@ import { AlignmentEnumSchema } from '../../enums/Alignment';
 import { EnvironmentEnumSchema } from '../../enums/Environment';
 import { Parsed5eMonsterBasicItemSchema } from './Parsed5eMonsterBasicItem';
 import { Parsed5eMonsterBasicItemArraySchema } from './Parsed5eMonsterBasicItem';
+import { MonsterTypeEnumSchema } from '../../enums/MonsterType';
 
 export const Parsed5eMonsterBasicInfoSchema = z.object({
   name: z.string(),
@@ -68,22 +69,7 @@ export const Parsed5eMonsterBasicInfoSchema = z.object({
   race: z.string().describe('Only if applicable'),
   size: z.enum(['Tiny', 'Small', 'Medium', 'Large', 'Huge', 'Gargantuan']),
   // TODO - make this enum better
-  type: z.enum([
-    'aberration',
-    'beast',
-    'celestial',
-    'construct',
-    'dragon',
-    'elemental',
-    'fey',
-    'fiend',
-    'giant',
-    'humanoid',
-    'monstrosity',
-    'ooze',
-    'plant',
-    'undead',
-  ]),
+  type: MonsterTypeEnumSchema,
   subtype: z.string(),
   isASwarm: z.boolean(),
   senses: z.object({

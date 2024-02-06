@@ -24,6 +24,7 @@ import { Foundry5eItem } from '../schemas/foundry/item/Foundry5eItem';
 
 import gargoyleJSON from '../srd/foundry_db_pastes/gargoyle.json';
 import { sizeToFoundrySize } from '../schemas/enums/Size';
+import StockAvatars from '../avatars/StockAvatars';
 
 export default class Foundry5eMonsterFormatter implements Foundry5eMonster {
   private basicInfo: Parsed5eMonsterBasicInfo;
@@ -83,7 +84,6 @@ export default class Foundry5eMonsterFormatter implements Foundry5eMonster {
   }
   // Hardcoded values
   type: 'npc' = 'npc';
-  img = '';
   effects = [];
   folder = null;
   sort = 0;
@@ -93,6 +93,10 @@ export default class Foundry5eMonsterFormatter implements Foundry5eMonster {
 
   get name(): string {
     return this.basicInfo.name;
+  }
+
+  get img(): string {
+    return StockAvatars[this.basicInfo.type];
   }
 
   get abilities() {
