@@ -58,6 +58,7 @@ jobs:
       # Update the 'latest' release
       - name: Update Latest Release
         id: create_latest_release
+        permissions: write-all
         uses: ncipollo/release-action@v1
         if: endsWith(github.ref, 'main')
         with:
