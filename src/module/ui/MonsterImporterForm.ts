@@ -32,12 +32,19 @@ class MonsterImporterForm extends FormApplication {
   userText: string;
   isLoading = false;
   isAPIKeyValid = true;
+  keyForm: OpenAIAPIKeyForm;
 
   constructor(options) {
     super(options);
     this.userText = '';
     this.checkAPIKey();
+    this.keyForm = new OpenAIAPIKeyForm(OpenAIAPIKeyForm.defaultOptions, this.reload);
   }
+
+  reload = async () => {
+    this.render();
+    await this.keyForm.close({ force: true });
+  };
 
   static get defaultOptions() {
     const options = super.defaultOptions;
@@ -78,7 +85,8 @@ class MonsterImporterForm extends FormApplication {
       .find('#llmtci-updateAPIKey')
       .on('click', async (event) => {
         event.preventDefault();
-        new OpenAIAPIKeyForm(OpenAIAPIKeyForm.defaultOptions).render(true);
+        /** Providing this.render as a way to reload after key is validated */
+        this.keyForm.render(true);
       });
     $(html)
       .find('#llmtci-compendiumSelect')

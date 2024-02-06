@@ -1,16 +1,13 @@
 import OpenAIAPIKeyStorage from './OpenAIAPIKeyStorage';
-
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-type Data = {
-  apiKey: string;
-};
-
-// type Options = Record<string, unknown>;
 
 // @ts-ignore - it's got a problem with my defaultOptions, I can't get why
 export default class OpenAIAPIKeyForm extends FormApplication {
-  constructor(options) {
+  onValidated: () => void;
+
+  constructor(options, onValidated: () => void = () => undefined) {
     super(options);
+    this.onValidated = onValidated;
   }
 
   static get defaultOptions() {
@@ -28,10 +25,13 @@ export default class OpenAIAPIKeyForm extends FormApplication {
   }
   /** @override */
   async getData(options): Promise<any> {
+    console.log('getData in key form: ', options);
+    const isValid = await OpenAIAPIKeyStorage.isStoredApiKeyValid();
+    if (isValid) this.onValidated();
     return {
       // TODO - add non-localStorage option
       apiKey: OpenAIAPIKeyStorage.getApiKey(),
-      isValid: await OpenAIAPIKeyStorage.isStoredApiKeyValid(),
+      isValid,
     };
   }
 
