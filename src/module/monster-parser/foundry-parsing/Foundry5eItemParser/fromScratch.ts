@@ -6,8 +6,7 @@ import { Parsed5eMonsterBasicItem } from '../../schemas/parsed-input-data/monste
 export const genCustomFoundry5eItemFromBasicItem = async (
   basicItem: Parsed5eMonsterBasicItem,
 ): Promise<Foundry5eItem> => {
-  const timer = RunTimer.getInstance();
-  console.log(`Generating custom foundry item ${name}, ${timer.timeElapsed()}s elapsed`);
+  console.log(`Generating custom foundry item ${name}, ${RunTimer.te()}s elapsed`);
 
   const llm = OpenAILLM('gpt-3.5-turbo');
 

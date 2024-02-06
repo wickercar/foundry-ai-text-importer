@@ -12,7 +12,6 @@ import { Foundry5eMonster } from './monster-parser/schemas/foundry/monster/Found
  */
 export const createFoundryActor = async (monster: Foundry5eMonster): Promise<Actor> => {
   console.log('creating foundry actor...');
-  console.log(monster);
 
   const monsterActor = await Actor.create({
     name: monster.name,
@@ -64,7 +63,6 @@ const addAllNonEmbeddedActorFields = async (monsterActor, monster) => {
 };
 
 const createFoundryItem = async (itemOutput): Promise<Item> => {
-  console.log('creating item from output: ', itemOutput);
   // try {
   const item = await Item.create({
     name: itemOutput.name,
@@ -89,6 +87,5 @@ const createFoundryItem = async (itemOutput): Promise<Item> => {
       console.error(`error updating item ${item.name} field ${key}: `, e);
     }
   }
-  console.log('item after adding system fields: ', item);
   return item;
 };

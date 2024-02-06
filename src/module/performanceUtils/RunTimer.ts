@@ -5,9 +5,6 @@ export default class RunTimer {
   private static instance: RunTimer;
   private startTime: number | null = null;
   private elapsedTimeMs = 0;
-
-  // Private constructor to prevent direct instantiation
-
   // Prettier disagrees with my autoformatter here so just disabling everything
   // eslint-disable-next-line
   private constructor() { }
@@ -20,12 +17,24 @@ export default class RunTimer {
     return RunTimer.instance;
   }
 
-  public static inst(): RunTimer {
-    return RunTimer.getInstance();
+  public static start(): void {
+    RunTimer.getInstance().startTimer();
+  }
+
+  public static stop(): void {
+    RunTimer.getInstance().startTimer();
+  }
+
+  public static timeElapsed(): number {
+    return RunTimer.getInstance().time();
+  }
+
+  public static te(): number {
+    return RunTimer.te();
   }
 
   // Start the RunTimer
-  public start(): void {
+  private startTimer(): void {
     if (this.startTime === null) {
       // Prevent restarting if already started
       this.startTime = Date.now();
@@ -33,7 +42,7 @@ export default class RunTimer {
   }
 
   // Stop the RunTimer and calculate elapsed time
-  public stop(): void {
+  private stopTimer(): void {
     if (this.startTime !== null) {
       this.elapsedTimeMs += Date.now() - this.startTime;
       this.startTime = null; // Reset startTime to allow restart
@@ -41,21 +50,11 @@ export default class RunTimer {
   }
 
   // Get the elapsed time in seconds
-  public timeElapsed(): number {
+  private time(): number {
     if (this.startTime !== null) {
       // If RunTimer is running, calculate elapsed time up to current moment
       return (this.elapsedTimeMs + (Date.now() - this.startTime)) / 1000;
     }
     return (this.elapsedTimeMs / 1000) % 1;
   }
-
-  public te(): number {
-    return this.timeElapsed();
-  }
 }
-// Usage:
-// const RunTimer = RunTimer.getInstance();
-// RunTimer.start();
-// // After some time...
-// RunTimer.stop();
-// console.log(`Time Elapsed: ${RunTimer.timeElapsed()} ms`);

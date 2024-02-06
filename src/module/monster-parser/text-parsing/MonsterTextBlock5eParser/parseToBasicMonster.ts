@@ -11,8 +11,7 @@ export const create5eLLMMonsterOutputParser = (): StructuredOutputParser<typeof 
 
 export const parseMonsterTextBlockTo5eMonster = async (text: string): Promise<Parsed5eLLMMonster> => {
   const llm = OpenAILLM();
-  const timer = RunTimer.getInstance();
-  console.log(`Starting to parse monster data from text, ${timer.timeElapsed()}s elapsed`);
+  console.log(`Starting to parse monster data from text, ${RunTimer.te()}s elapsed`);
   const prompt = PromptTemplate.fromTemplate(`
     Parse the provided monster text into a json schema as specified below.
 

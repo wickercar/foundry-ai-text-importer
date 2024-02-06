@@ -10,8 +10,7 @@ import { LLMChain } from 'langchain/chains';
 
 export const parse5eMonsterTextBlockToBasicInfo = async (text: string): Promise<Parsed5eMonsterBasicInfo> => {
   const llm = OpenAILLM();
-  const timer = RunTimer.getInstance();
-  console.log(`Starting to parse basic info from text, ${timer.timeElapsed()}s elapsed`);
+  console.log(`Starting to parse basic info from text, ${RunTimer.te()}s elapsed`);
   const prompt = PromptTemplate.fromTemplate(`
     Parse the specified parts of the provided monster text into a json schema as specified below.
 

@@ -10,8 +10,7 @@ export const genCustomBoilerplateFoundry5eItemFromBasicItem = ({
   text,
   type,
 }: Parsed5eMonsterBasicItem): Foundry5eItem => {
-  const timer = RunTimer.getInstance();
-  console.log(`Generating custom foundry item ${name}, ${timer.timeElapsed()}s elapsed`);
+  console.log(`Generating custom foundry item ${name}, ${RunTimer.te()}s elapsed`);
   // TODO - this is boilerplate for now, just replacing name and description with name and text. Will want to make it a just holding it here to finish the foundry import piece
   const activationType = activationTypeFromBasicItemType(type);
 
@@ -87,7 +86,7 @@ export const genCustomBoilerplateFoundry5eItemFromBasicItem = ({
     // }
   });
 
-  console.log(`Generated custom foundry item ${name}, ${RunTimer.inst().te()}s elapsed`);
+  console.log(`Generated custom foundry item ${name}, ${RunTimer.te()}s elapsed`);
   return item;
 };
 

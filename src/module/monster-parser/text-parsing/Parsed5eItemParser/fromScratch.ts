@@ -12,8 +12,7 @@ export const genCustomParsed5eItemFromBasicItem = async (
   useChunks = false,
   img: string | undefined = undefined,
 ): Promise<Parsed5eItem> => {
-  const timer = RunTimer.getInstance();
-  console.log(`Generating custom parsed item ${basicItem.name}, ${timer.timeElapsed()}s elapsed`);
+  console.log(`Generating custom parsed item ${basicItem.name}, ${RunTimer.te()}s elapsed`);
   // Using "chunks" strategy to generate the item from scratch
 
   // "Chunks" strategy
@@ -28,9 +27,8 @@ const parseInOneCall = async (
   img: string | undefined = undefined,
 ): Promise<Parsed5eItem> => {
   const llm = OpenAILLM();
-  const timer = RunTimer.getInstance();
 
-  console.log('parsing item in one call: ', basicItem.name, basicItem.text, timer.timeElapsed(), 's elapsed');
+  console.log('parsing item in one call: ', basicItem.name, basicItem.text, RunTimer.te(), 's elapsed');
 
   const prompt = PromptTemplate.fromTemplate(`
     Parse the provided item text into the json schema specified below.
@@ -61,7 +59,7 @@ const parseInOneCall = async (
   output.effects = [];
   // passthrough fields
   output.img = img;
-  console.log('Parsed item in one call: ', basicItem.name, basicItem.text, timer.timeElapsed(), 's elapsed');
+  console.log('Parsed item in one call: ', basicItem.name, basicItem.text, RunTimer.te(), 's elapsed');
   return output;
 };
 
@@ -70,7 +68,6 @@ const parseInChunks = async (
   img: string | undefined = undefined,
 ): Promise<Parsed5eItem> => {
   const llm = OpenAILLM('gpt-4');
-  const timer = RunTimer.getInstance();
 
   const prompt = PromptTemplate.fromTemplate(`
     Parse the provided item text into the json schema specified below.
@@ -117,7 +114,7 @@ const parseInChunks = async (
     return { ...acc, ...chunk };
   }, {}) as Parsed5eItem;
   item.img = img;
-  console.log(`Item ${item.name} generated from scratch by chunking, ${timer.timeElapsed()}s elapsed`);
+  console.log(`Item ${item.name} generated from scratch by chunking, ${RunTimer.te()}s elapsed`);
   console.log('item: ', item);
 
   return item;
