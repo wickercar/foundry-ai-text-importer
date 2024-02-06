@@ -1,5 +1,5 @@
 import { PromptTemplate } from 'langchain/prompts';
-import RunTimer from '../../../module/performanceUtils/RunTimer';
+import RunTimer from '../../../performanceUtils/RunTimer';
 import OpenAILLM from '../../llm/openaillm';
 import { Parsed5eItem, Parsed5eItemSchema } from '../../schemas/parsed-input-data/item/Parsed5eItem';
 import { Parsed5eMonsterBasicItem } from '../../schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';

@@ -1,4 +1,4 @@
-import RunTimer from '../../../module/performanceUtils/RunTimer';
+import RunTimer from '../../../performanceUtils/RunTimer';
 import OpenAILLM from '../../llm/openaillm';
 import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/Foundry5eItem';
 import { Parsed5eMonsterBasicItem } from '../../schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';

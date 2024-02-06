@@ -1,4 +1,4 @@
-import { Foundry5eMonster } from '../../monster-parser/schemas/foundry/monster/Foundry5eMonster';
+import { Foundry5eMonster } from '../monster-parser/schemas/foundry/monster/Foundry5eMonster';
 
 const ratKing: Foundry5eMonster = {
   name: 'Rat King',
