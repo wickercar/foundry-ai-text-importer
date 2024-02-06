@@ -8,6 +8,7 @@ import foundryMonsterCompendia, {
 import { fetchGPTModels } from '../monster-parser/llm/openaiModels';
 import featureFlags from '../featureFlags';
 import { Data } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/foundry.js/roll';
+import TaskTracker from '../performanceUtils/TaskTracker';
 
 type DropdownOption = {
   name: string;
@@ -23,6 +24,8 @@ type FormData = {
   modelOptions: DropdownOption[];
   showModelSelector: boolean;
 };
+
+const RERENDER_DURING_LOAD_INTERVAL_MS = 1000;
 /**
  * Imports a monster from a single text block using AI
  *
@@ -39,12 +42,14 @@ class MonsterImporterForm extends FormApplication {
   keyForm: OpenAIAPIKeyForm;
   // Loading Tasks
   taskTracker: TaskTracker;
+  tickerTimeout: NodeJS.Timeout;
 
   constructor(options) {
     super(options);
     this.userText = '';
     this.checkAPIKey();
     this.keyForm = new OpenAIAPIKeyForm(OpenAIAPIKeyForm.defaultOptions, this.reload);
+    this.taskTracker = new TaskTracker();
   }
 
   reload = async () => {
@@ -68,11 +73,15 @@ class MonsterImporterForm extends FormApplication {
 
   startLoad() {
     this.isLoading = true;
-    this.render();
+    // when loading, "tick" to rerender and update the time elapsed
+    this.tickerTimeout = setInterval(() => {
+      this.render();
+    }, RERENDER_DURING_LOAD_INTERVAL_MS);
   }
 
   endLoad() {
     this.isLoading = false;
+    clearInterval(this.tickerTimeout);
     this.render();
   }
 
@@ -149,11 +158,12 @@ class MonsterImporterForm extends FormApplication {
       ...superData,
       title: this.options.title,
       invalidAPIKey: !this.isAPIKeyValid,
-      // isLoading: this.isLoading,
-      isLoading: true, // TEMP - harcoding to true to test loading spinner
+      isLoading: this.isLoading,
+      // isLoading: true, // TEMP - harcoding to true to test loading spinner
       actorCompendiumOptions: await this.genActorCompendiumOptions(),
       showModelSelector: featureFlags.modelSelector,
       modelOptions: featureFlags.modelSelector ? await this.genModelOptions() : [],
+      tasks: this.taskTracker.tasks,
     };
     return data;
   }
