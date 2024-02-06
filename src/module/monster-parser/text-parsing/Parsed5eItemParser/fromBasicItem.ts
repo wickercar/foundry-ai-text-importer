@@ -11,7 +11,7 @@ export const genParsed5eItemFromBasicItem = async (
   // TODO - the type of the example item should be abstracted out of this method once other example sources are supported
   const exampleFoundryItem = await FoundryItemCompendia.findItemWithName(basicItem.name);
   if (exampleFoundryItem) {
-    console.log('example foundry item found!', exampleFoundryItem);
+    console.log(`Example Item Provided for ${basicItem.name}: !`, exampleFoundryItem);
   }
   // convert the foundry example to a parsed5eItem (with just formatting)
   // TODO - example items support in this new paradigm (look at Foundry5eItemParser, do that but convert to Parsed5eItem)

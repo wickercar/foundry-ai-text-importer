@@ -37,7 +37,5 @@ export const parseMonsterTextBlockTo5eMonster = async (text: string): Promise<Pa
     })
   ).text;
 
-  console.log('unparsed output | ', output);
-
   return output as Parsed5eLLMMonster;
 };

@@ -28,7 +28,7 @@ const parseInOneCall = async (
 ): Promise<Parsed5eItem> => {
   const llm = OpenAILLM();
 
-  console.log('parsing item in one call: ', basicItem.name, basicItem.text, RunTimer.te(), 's elapsed');
+  console.log('Parsing item in one call: ', basicItem.name, basicItem.text, RunTimer.te(), 's elapsed');
 
   const prompt = PromptTemplate.fromTemplate(`
     Parse the provided item text into the json schema specified below.
@@ -114,8 +114,5 @@ const parseInChunks = async (
     return { ...acc, ...chunk };
   }, {}) as Parsed5eItem;
   item.img = img;
-  console.log(`Item ${item.name} generated from scratch by chunking, ${RunTimer.te()}s elapsed`);
-  console.log('item: ', item);
-
   return item;
 };

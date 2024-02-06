@@ -36,7 +36,5 @@ export const parse5eMonsterTextBlockToBasicItems = async (text: string): Promise
     })
   ).text;
 
-  console.log('unparsed output | ', output);
-
   return output as Parsed5eMonsterBasicItemArray;
 };

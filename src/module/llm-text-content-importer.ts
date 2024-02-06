@@ -5,21 +5,12 @@ import registerQuenchTests from './quench/registerQuenchTests';
 import testRatkingWarfOutput from './quench/testRatkingWarfOutput';
 import MonsterImporterForm from './ui/MonsterImporterForm';
 
-Hooks.once('init', async () => {
-  console.log('llm-text-content-importer Initialized!!');
-});
-
 Hooks.on('ready', async () => {
-  console.log('llm-text-content-importer Ready!!');
   registerSettings();
-  // Temp for testing - Hardcoded Foundry5eMonster => Actor
-  // const testRatkingActor = await createFoundryActor(testRatkingWarfOutput as Foundry5eMonster);
-  // testRatkingActor.sheet?.render(true);
 });
 
 Hooks.on('quenchReady', (quench) => {
   registerQuenchTests(quench);
-  // comment out to not auto-run tests
 });
 
 Hooks.on('renderActorDirectory', () => {

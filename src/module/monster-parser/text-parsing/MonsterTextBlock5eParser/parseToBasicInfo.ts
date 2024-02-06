@@ -34,7 +34,5 @@ export const parse5eMonsterTextBlockToBasicInfo = async (text: string): Promise<
     })
   ).text;
 
-  console.log('basicInfo | ', output);
-
   return output as Parsed5eMonsterBasicInfo;
 };

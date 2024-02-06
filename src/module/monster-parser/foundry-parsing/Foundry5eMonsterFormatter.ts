@@ -223,8 +223,6 @@ export default class Foundry5eMonsterFormatter implements Foundry5eMonster {
       // Add other mappings as necessary
     };
 
-    console.log('this.basicInfo.skills: ', this.basicInfo.skills);
-
     const foundrySkills = {};
     this.basicInfo.skills.forEach((skill) => {
       const skillAbbreviation = skillMapping[skill.name];
@@ -240,8 +238,6 @@ export default class Foundry5eMonsterFormatter implements Foundry5eMonster {
         },
       };
     });
-
-    console.log('foundrySkills: ', foundrySkills);
 
     return Foundry5eMonsterSkillsSchema.parse(foundrySkills);
   }

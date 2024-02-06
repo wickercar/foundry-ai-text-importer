@@ -97,9 +97,8 @@ class MonsterImporterForm extends FormApplication {
         const userText = $(html).find('#llmtci-userText').val() as string;
         this.userText = userText;
         this.startLoad();
-        console.log('monster text submitted: ', userText);
-        const actor = await genFoundry5eMonsterActorFromTextBlock(userText);
-        console.log('actor generated : ', actor);
+        // main text block parsing function
+        await genFoundry5eMonsterActorFromTextBlock(userText);
         this.endLoad();
       });
     $(html)
@@ -114,7 +113,6 @@ class MonsterImporterForm extends FormApplication {
       .on('change', async (event) => {
         event.preventDefault();
         const selectedCompendiumName = $(html).find('#llmtci-compendiumSelect').val();
-        console.log('changing compendium setting to: ', selectedCompendiumName);
         game.settings.set('llm-text-content-importer', 'compendiumImportDestination', selectedCompendiumName);
       });
     if (featureFlags.modelSelector) {
@@ -140,7 +138,6 @@ class MonsterImporterForm extends FormApplication {
 
   async checkAPIKey(): Promise<void> {
     const isValid = await OpenAIAPIKeyStorage.isStoredApiKeyValid();
-    console.log('isValid: ', isValid);
     if (!isValid) {
       console.error('Invalid API Key');
       this.isAPIKeyValid = false;

@@ -71,7 +71,6 @@ export default class TaskTracker {
   }
 
   static clear() {
-    console.log('TaskTracker.clear');
     TaskTracker.getInstance().clearTasks();
   }
 

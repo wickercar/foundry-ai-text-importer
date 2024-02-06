@@ -60,7 +60,6 @@ const getAllActorCompendia = async () => {
 const getCompendiumOrCreateIfNotExists = async (compendiumName, compendiumLabel) => {
   // Not sure if this is right
   let compendium = await getCompendiumByName(compendiumName);
-  console.log('compendium found?', compendium);
   if (!compendium) {
     compendium = await CompendiumCollection.createCompendium(
       {

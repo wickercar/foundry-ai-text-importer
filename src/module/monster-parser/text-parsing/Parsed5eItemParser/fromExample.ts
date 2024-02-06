@@ -12,7 +12,6 @@ export const genParsed5eItemFromExample = async (
 ): Promise<Parsed5eItem> => {
   const llm = OpenAILLM();
   console.log(`Starting to generate item ${basicItem.name} from example, ${RunTimer.te()}s elapsed`);
-  console.log('exampleItem: ', exampleItem);
   const prompt = PromptTemplate.fromTemplate(`
     Parse the provided item text into the json schema specified below. The outputted fields should have the same values as the base item provided unless the itemText suggests a clear difference.
 
@@ -49,10 +48,7 @@ export const genParsed5eItemFromExample = async (
   // Passthrough fields
   output.img = exampleItem.img;
   output.flags = exampleItem.flags;
-  // TEMP - flag which items are from examples
-  output.system.description.value += `\n\n${exampleItem.name} was generated from an example`;
 
   console.log(`Item ${output.name} generated from example, ${RunTimer.te()}s elapsed`);
-  console.log('item: ', output);
   return output;
 };

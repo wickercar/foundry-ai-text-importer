@@ -1,7 +1,6 @@
 import { PromptTemplate } from 'langchain/prompts';
 import OpenAILLM from '../../llm/openaillm';
 import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/Foundry5eItem';
-import { z } from 'zod';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { LLMChain } from 'langchain/chains';
 import RunTimer from '../../../performanceUtils/RunTimer';
@@ -13,7 +12,6 @@ export const genFoundry5eItemFromExample = async (
 ): Promise<Foundry5eItem> => {
   const llm = OpenAILLM();
   console.log(`Starting to generate item ${basicItem.name} from example, ${RunTimer.te()}s elapsed`);
-  console.log('exampleItem: ', exampleItem);
   const prompt = PromptTemplate.fromTemplate(`
     Parse the provided item text into the json schema specified below. The outputted fields should have the same values as the base item provided unless the itemText suggests a clear difference.
 
