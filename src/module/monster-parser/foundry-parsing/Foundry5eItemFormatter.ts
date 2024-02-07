@@ -5,6 +5,7 @@ import { SavingThrowAbilitiesEnumSchema } from '../schemas/enums/SavingThrowAbil
 import { SavingThrowScaling, SavingThrowScalingEnumSchema } from '../schemas/enums/SavingThrowScaling';
 import { Foundry5eItemDurationSchema } from '../schemas/foundry/item/Foundry5eItemDuration';
 import { Foundry5eRangeSchema } from '../schemas/foundry/item/Foundry5eRange';
+import { FoundryActionTypeFromActionType } from '../schemas/enums/foundry-specific/FoundryActionType';
 
 export default class Foundry5eItemFormatter implements Foundry5eItem {
   private parsedItem: Parsed5eItem;
@@ -57,7 +58,20 @@ export default class Foundry5eItemFormatter implements Foundry5eItem {
   }
 
   get type(): Foundry5eItem['type'] {
-    return this.parsedItem.type;
+    // Inferring foundry item type from actionType for now, only allowing weapons and feats
+    switch (this.parsedItem.actionType) {
+      case 'meleeWeaponAttack':
+      case 'rangedWeaponAttack':
+        return 'weapon';
+      case 'meleeSpellAttack':
+      case 'rangedSpellAttack':
+      case 'healing':
+      case 'ability':
+      case 'savingThrow':
+      case 'utility':
+      default:
+        return 'feat';
+    }
   }
 
   get description(): Foundry5eItem['system']['description'] {
@@ -121,7 +135,7 @@ export default class Foundry5eItemFormatter implements Foundry5eItem {
   }
 
   get actionType(): Foundry5eItem['system']['actionType'] {
-    return this.parsedItem.actionType;
+    return FoundryActionTypeFromActionType(this.parsedItem.actionType);
   }
 
   get attackBonus(): Foundry5eItem['system']['attackBonus'] {

@@ -1,9 +1,10 @@
 import { z } from 'zod';
 import { FoundryMonsterStatsSchema, OwnershipSchema } from '../monster/FoundryMonster';
 import { ActivationTypeEnumSchema } from '../../enums/ActivationType';
-import { ActionTypeEnumSchema } from '../../enums/ActionType';
+import { FoundryActionTypeEnumSchema } from '../../enums/foundry-specific/FoundryActionType';
 import { SavingThrowAbilitiesEnumSchema } from '../../enums/SavingThrowAbilities';
 import { Foundry5eItemDurationSchema } from './Foundry5eItemDuration';
+import { ItemTypeEnumSchema } from '../../enums/ItemType';
 
 const PriceSchema = z.object({
   value: z.number().default(0),
@@ -13,7 +14,7 @@ const PriceSchema = z.object({
 export const Foundry5eItemSchema = z.object({
   _id: z.string().optional(),
   name: z.string(),
-  type: z.enum(['weapon', 'equipment', 'spell', 'feat', 'class', 'subclass']), // these should be the types that apply to monsters but more for PCs
+  type: ItemTypeEnumSchema, // these should be the types that apply to monsters but more for PCs
   img: z.string(),
   /** Optional fields, consider taking off **/
   effects: z.array(z.string()).optional().default([]),
@@ -70,7 +71,7 @@ export const Foundry5eItemSchema = z.object({
         amount: z.number().nullable(),
       }),
       ability: z.string().nullable(),
-      actionType: ActionTypeEnumSchema,
+      actionType: FoundryActionTypeEnumSchema,
       attackBonus: z.string(),
       chatFlavor: z.string(),
       critical: z.object({
