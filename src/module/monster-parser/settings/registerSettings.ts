@@ -1,3 +1,4 @@
+import featureFlags from '../../featureFlags';
 import OpenAIAPIKeyForm from './openai-api-key/OpenAIAPIKeyForm';
 
 export const registerSettings = (): void => {
@@ -20,7 +21,7 @@ export const registerSettings = (): void => {
     name: 'OpenAI Model',
     hint: 'The OpenAI model to use for generating monsters',
     type: String,
-    config: true, // Might want to take it out and just have it in input UI
+    config: featureFlags.modelSelector, // TODO - this needs to support a dropdown, not plaintext
     scope: 'world', // "world" | "client" | "server"
   });
 };
