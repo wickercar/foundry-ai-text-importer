@@ -1,6 +1,5 @@
 import { Foundry5eMonster } from './schemas/foundry/monster/Foundry5eMonster';
 import genFoundry5eMonster from './foundry-parsing/Foundry5eMonsterFormatter';
-import RunTimer from '../performanceUtils/RunTimer';
 import MonsterTextBlock5eParser from './text-parsing/MonsterTextBlock5eParser/MonsterTextBlock5eParser';
 import { Parsed5eLLMMonster } from './schemas/parsed-input-data/monster/Parsed5eMonster';
 import Foundry5eItemParser from './foundry-parsing/Foundry5eItemParser/Foundry5eItemParser';
@@ -20,7 +19,6 @@ export const genFoundry5eMonsterFromTextBlock = async (
   text: string,
   strategy: MonsterTextBlock5eParsingStrategy = 'SMALL_SCHEMA_NO_CHUNKS',
 ): Promise<Foundry5eMonster> => {
-  console.log(`Generating monster from text block with strategy ${strategy}, ${RunTimer.te()}s elapsed`);
   switch (strategy) {
     case 'ONE_CALL':
       return await oneCallStrategy(text);
@@ -37,31 +35,25 @@ export const genFoundry5eMonsterFromTextBlock = async (
 
 const oneCallStrategy = async (text: string): Promise<Foundry5eMonster> => {
   const basicMonster: Parsed5eLLMMonster = await MonsterTextBlock5eParser.toBasicMonster(text);
-  console.log(`Generated basic monster with basicItems from text block, ${RunTimer.te()}s elapsed`);
   const foundryItems: Foundry5eItem[] = await Foundry5eItemParser.fromBasicItemList(basicMonster.basicItems);
-  console.log(`Generated all foundry items, ${RunTimer.te()}s elapsed`);
   return Foundry5eMonsterFormatter.format(basicMonster, foundryItems);
 };
 
 const separateItemsAndStatsStrategy = async (text: string): Promise<Foundry5eMonster> => {
   // TODO - try splitting the text first and then parsing the basic info and item names and text fields separately
   const basicInfoPromise = MonsterTextBlock5eParser.toBasicInfo(text).then((basicInfo) => {
-    console.log(`Parsed basic info, ${RunTimer.te()}s elapsed`);
     return basicInfo;
   });
   const basicItems = await MonsterTextBlock5eParser.toBasicItems(text);
   const foundryItems = await Foundry5eItemParser.fromBasicItemList(basicItems).then((items) => {
-    console.log(`Generated all foundry items, ${RunTimer.te()}s elapsed`);
     return items;
   });
   const basicInfo = await basicInfoPromise;
-  console.log('Generated all foundry info and items, formatting', RunTimer.te(), 's elapsed');
   return Foundry5eMonsterFormatter.format(basicInfo, foundryItems);
 };
 
 const parseItemWithParsed5eItemSchemaStrategy = async (text: string, inChunks: boolean): Promise<Foundry5eMonster> => {
   const basicInfoPromise = MonsterTextBlock5eParser.toBasicInfo(text).then((basicInfo) => {
-    console.log(`Parsed basic info, ${RunTimer.te()}s elapsed`);
     return basicInfo;
   });
   TaskTracker.startNewTask('Parse Monster Stats', 'Use llm to extract base monster attributes/stats', basicInfoPromise);
@@ -73,12 +65,10 @@ const parseItemWithParsed5eItemSchemaStrategy = async (text: string, inChunks: b
   );
   const basicItems = await basicItemsPromise;
   const parsedItemsPromise = Parsed5eItemParser.fromBasicItemList(basicItems, inChunks).then((items) => {
-    console.log(`Generated all foundry items, ${RunTimer.te()}s elapsed`);
     return items;
   });
   const parsedItems = await parsedItemsPromise;
   const foundryItems = parsedItems.map((item) => Foundry5eItemFormatter.format(item));
   const basicInfo = await basicInfoPromise;
-  console.log('Generated all foundry info and items, formatting', RunTimer.te(), 's elapsed');
   return Foundry5eMonsterFormatter.format(basicInfo, foundryItems);
 };

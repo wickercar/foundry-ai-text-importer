@@ -3,7 +3,6 @@ import OpenAILLM from '../../llm/openaillm';
 import { Parsed5eItem, Parsed5eItemSchema } from '../../schemas/parsed-input-data/item/Parsed5eItem';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { LLMChain } from 'langchain/chains';
-import RunTimer from '../../../performanceUtils/RunTimer';
 import { Parsed5eMonsterBasicItem } from '../../schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';
 
 export const genParsed5eItemFromExample = async (
@@ -11,7 +10,6 @@ export const genParsed5eItemFromExample = async (
   exampleItem: Parsed5eItem,
 ): Promise<Parsed5eItem> => {
   const llm = OpenAILLM();
-  console.log(`Starting to generate item ${basicItem.name} from example, ${RunTimer.te()}s elapsed`);
   const prompt = PromptTemplate.fromTemplate(`
     Parse the provided item text into the json schema specified below. The outputted fields should have the same values as the base item provided unless the itemText suggests a clear difference.
 
@@ -49,6 +47,5 @@ export const genParsed5eItemFromExample = async (
   output.img = exampleItem.img;
   output.flags = exampleItem.flags;
 
-  console.log(`Item ${output.name} generated from example, ${RunTimer.te()}s elapsed`);
   return output;
 };

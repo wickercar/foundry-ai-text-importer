@@ -3,7 +3,6 @@ import OpenAILLM from '../../llm/openaillm';
 import { Parsed5eLLMMonster, Parsed5eLLMMonsterSchema } from '../../schemas/parsed-input-data/monster/Parsed5eMonster';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { LLMChain } from 'langchain/chains';
-import RunTimer from '../../../performanceUtils/RunTimer';
 
 export const create5eLLMMonsterOutputParser = (): StructuredOutputParser<typeof Parsed5eLLMMonsterSchema> => {
   return StructuredOutputParser.fromZodSchema(Parsed5eLLMMonsterSchema);
@@ -11,7 +10,6 @@ export const create5eLLMMonsterOutputParser = (): StructuredOutputParser<typeof 
 
 export const parseMonsterTextBlockTo5eMonster = async (text: string): Promise<Parsed5eLLMMonster> => {
   const llm = OpenAILLM();
-  console.log(`Starting to parse monster data from text, ${RunTimer.te()}s elapsed`);
   const prompt = PromptTemplate.fromTemplate(`
     Parse the provided monster text into a json schema as specified below.
 

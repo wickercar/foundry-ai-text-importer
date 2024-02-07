@@ -1,5 +1,4 @@
 import { PromptTemplate } from 'langchain/prompts';
-import RunTimer from '../../../performanceUtils/RunTimer';
 import OpenAILLM from '../../llm/openaillm';
 import { Parsed5eItem, Parsed5eItemSchema } from '../../schemas/parsed-input-data/item/Parsed5eItem';
 import { Parsed5eMonsterBasicItem } from '../../schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';
@@ -12,7 +11,6 @@ export const genCustomParsed5eItemFromBasicItem = async (
   useChunks = false,
   img: string | undefined = undefined,
 ): Promise<Parsed5eItem> => {
-  console.log(`Generating custom parsed item ${basicItem.name}, ${RunTimer.te()}s elapsed`);
   // Using "chunks" strategy to generate the item from scratch
 
   // "Chunks" strategy
@@ -27,8 +25,6 @@ const parseInOneCall = async (
   img: string | undefined = undefined,
 ): Promise<Parsed5eItem> => {
   const llm = OpenAILLM();
-
-  console.log('Parsing item in one call: ', basicItem.name, basicItem.text, RunTimer.te(), 's elapsed');
 
   const prompt = PromptTemplate.fromTemplate(`
     Parse the provided item text into the json schema specified below.
@@ -59,7 +55,6 @@ const parseInOneCall = async (
   output.effects = [];
   // passthrough fields
   output.img = img;
-  console.log('Parsed item in one call: ', basicItem.name, basicItem.text, RunTimer.te(), 's elapsed');
   return output;
 };
 

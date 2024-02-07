@@ -1,4 +1,3 @@
-import RunTimer from '../../../performanceUtils/RunTimer';
 import { ActivationType } from '../../schemas/enums/ActivationType';
 import { BasicItemType } from '../../schemas/enums/BasicItemType';
 import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/Foundry5eItem';
@@ -10,7 +9,6 @@ export const genCustomBoilerplateFoundry5eItemFromBasicItem = ({
   text,
   type,
 }: Parsed5eMonsterBasicItem): Foundry5eItem => {
-  console.log(`Generating custom foundry item ${name}, ${RunTimer.te()}s elapsed`);
   // TODO - this is boilerplate for now, just replacing name and description with name and text. Will want to make it a just holding it here to finish the foundry import piece
   const activationType = activationTypeFromBasicItemType(type);
 
@@ -86,7 +84,6 @@ export const genCustomBoilerplateFoundry5eItemFromBasicItem = ({
     // }
   });
 
-  console.log(`Generated custom foundry item ${name}, ${RunTimer.te()}s elapsed`);
   return item;
 };
 

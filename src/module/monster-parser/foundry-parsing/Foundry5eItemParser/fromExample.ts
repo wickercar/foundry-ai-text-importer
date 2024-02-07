@@ -3,7 +3,6 @@ import OpenAILLM from '../../llm/openaillm';
 import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/Foundry5eItem';
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { LLMChain } from 'langchain/chains';
-import RunTimer from '../../../performanceUtils/RunTimer';
 import { Parsed5eMonsterBasicItem } from '../../schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';
 
 export const genFoundry5eItemFromExample = async (
@@ -11,7 +10,6 @@ export const genFoundry5eItemFromExample = async (
   exampleItem: Foundry5eItem,
 ): Promise<Foundry5eItem> => {
   const llm = OpenAILLM();
-  console.log(`Starting to generate item ${basicItem.name} from example, ${RunTimer.te()}s elapsed`);
   const prompt = PromptTemplate.fromTemplate(`
     Parse the provided item text into the json schema specified below. The outputted fields should have the same values as the base item provided unless the itemText suggests a clear difference.
 
@@ -52,7 +50,6 @@ export const genFoundry5eItemFromExample = async (
   // TEMP - flag which items are from examples
   output.system.description.value += `\n\n${exampleItem.name} was generated from an example`;
 
-  console.log(`Item ${output.name} generated from example, ${RunTimer.te()}s elapsed`);
   console.log('item: ', output);
   return output;
 };
