@@ -12,12 +12,15 @@ export const genCustomParsed5eItemFromBasicItem = async (
   img: string | undefined = undefined,
 ): Promise<Parsed5eItem> => {
   // Using "chunks" strategy to generate the item from scratch
-
+  let parsed5eItem;
   // "Chunks" strategy
   if (useChunks) {
-    return parseInChunks(basicItem, img);
+    parsed5eItem = await parseInChunks(basicItem, img);
+  } else {
+    parsed5eItem = await parseInOneCall(basicItem, img);
   }
-  return parseInOneCall(basicItem, img);
+  console.log('Parsed Custom Item Data: ', parsed5eItem);
+  return parsed5eItem;
 };
 
 const parseInOneCall = async (

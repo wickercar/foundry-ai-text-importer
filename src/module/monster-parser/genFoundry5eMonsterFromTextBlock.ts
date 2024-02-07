@@ -19,18 +19,19 @@ export const genFoundry5eMonsterFromTextBlock = async (
   text: string,
   strategy: MonsterTextBlock5eParsingStrategy = 'SMALL_SCHEMA_NO_CHUNKS',
 ): Promise<Foundry5eMonster> => {
+  let foundry5eMonster: Foundry5eMonster;
   switch (strategy) {
     case 'ONE_CALL':
-      return await oneCallStrategy(text);
+      foundry5eMonster = await oneCallStrategy(text);
     case 'SEPARATE_ITEMS_AND_STATS':
-      return await separateItemsAndStatsStrategy(text);
+      foundry5eMonster = await separateItemsAndStatsStrategy(text);
     case 'SMALL_SCHEMA_IN_CHUNKS':
-      return await parseItemWithParsed5eItemSchemaStrategy(text, true);
+      foundry5eMonster = await parseItemWithParsed5eItemSchemaStrategy(text, true);
     case 'SMALL_SCHEMA_NO_CHUNKS':
-      return await parseItemWithParsed5eItemSchemaStrategy(text, false);
-    default:
-      throw new Error(`Invalid Text Parsing strategy param: ${strategy}`);
+      foundry5eMonster = await parseItemWithParsed5eItemSchemaStrategy(text, false);
   }
+  console.log('Foundry Monster Generated: ', foundry5eMonster);
+  return foundry5eMonster;
 };
 
 const oneCallStrategy = async (text: string): Promise<Foundry5eMonster> => {
@@ -69,6 +70,7 @@ const parseItemWithParsed5eItemSchemaStrategy = async (text: string, inChunks: b
   });
   const parsedItems = await parsedItemsPromise;
   const foundryItems = parsedItems.map((item) => Foundry5eItemFormatter.format(item));
+  console.log('Parsed Foundry Items: ', foundryItems);
   const basicInfo = await basicInfoPromise;
   return Foundry5eMonsterFormatter.format(basicInfo, foundryItems);
 };
