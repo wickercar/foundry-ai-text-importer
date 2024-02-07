@@ -2,13 +2,14 @@ import { z } from 'zod';
 import { ActivationTypeEnumSchema } from '../../enums/ActivationType';
 import { SavingThrowAbilitiesEnumSchema } from '../../enums/SavingThrowAbilities';
 import { ActionTypeEnumSchema } from '../../enums/ActionType';
+import { ItemTypeEnumSchema } from '../../enums/ItemType';
 
 /**
  * This includes only the fields we will actually ask for (as opposed to reverting to default), with a simplified structure
  */
 export const Parsed5eItemSchema = z.object({
   name: z.string(),
-  type: z.enum(['weapon', 'equipment', 'spell', 'feat', 'class', 'subclass']), // these should be the types that apply to monsters but more for PCs
+  // type: ItemTypeEnumSchema, // TODO - basing off of ActionType for now
   // source: z.string(),
   activation: z.object({
     type: ActivationTypeEnumSchema,

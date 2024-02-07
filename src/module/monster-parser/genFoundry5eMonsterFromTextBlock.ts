@@ -8,6 +8,8 @@ import Foundry5eMonsterFormatter from './foundry-parsing/Foundry5eMonsterFormatt
 import Parsed5eItemParser from './text-parsing/Parsed5eItemParser/Parsed5eItemParser';
 import Foundry5eItemFormatter from './foundry-parsing/Foundry5eItemFormatter';
 import TaskTracker from '../performanceUtils/TaskTracker';
+import { Parsed5eItem } from './schemas/parsed-input-data/item/Parsed5eItem';
+import { notUndefined } from './utils';
 
 type MonsterTextBlock5eParsingStrategy =
   | 'ONE_CALL'
@@ -47,7 +49,7 @@ const separateItemsAndStatsStrategy = async (text: string): Promise<Foundry5eMon
   });
   const basicItems = await MonsterTextBlock5eParser.toBasicItems(text);
   const foundryItems = await Foundry5eItemParser.fromBasicItemList(basicItems).then((items) => {
-    return items;
+    return items.filter(notUndefined);
   });
   const basicInfo = await basicInfoPromise;
   return Foundry5eMonsterFormatter.format(basicInfo, foundryItems);
@@ -65,10 +67,8 @@ const parseItemWithParsed5eItemSchemaStrategy = async (text: string, inChunks: b
     basicItemsPromise,
   );
   const basicItems = await basicItemsPromise;
-  const parsedItemsPromise = Parsed5eItemParser.fromBasicItemList(basicItems, inChunks).then((items) => {
-    return items;
-  });
-  const parsedItems = await parsedItemsPromise;
+  const parsedItemsPromise = Parsed5eItemParser.fromBasicItemList(basicItems, inChunks);
+  const parsedItems: Array<Parsed5eItem> = await parsedItemsPromise;
   const foundryItems = parsedItems.map((item) => Foundry5eItemFormatter.format(item));
   console.log('Parsed Foundry Items: ', foundryItems);
   const basicInfo = await basicInfoPromise;
