@@ -5,6 +5,9 @@ import { EnvironmentEnumSchema } from '../../enums/Environment';
 import { Parsed5eMonsterBasicItemSchema } from './Parsed5eMonsterBasicItem';
 import { Parsed5eMonsterBasicItemArraySchema } from './Parsed5eMonsterBasicItem';
 import { MonsterTypeEnumSchema } from '../../enums/MonsterType';
+import { Ability, AbilitySchema } from '../../enums/Ability';
+import { SkillEnumSchema } from '../../enums/Skill';
+import { SizeEnumSchema } from '../../enums/Size';
 
 export const Parsed5eMonsterBasicInfoSchema = z.object({
   name: z.string(),
@@ -18,7 +21,7 @@ export const Parsed5eMonsterBasicInfoSchema = z.object({
   }),
   xp: z.number().describe('experience points'),
   initiativeSkillCheck: z.object({
-    ability: z.enum(['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma']),
+    ability: AbilitySchema,
     modifier: z.string().describe('e.g. "+3" or "-1"'),
   }),
   hitPoints: z.object({
@@ -36,39 +39,14 @@ export const Parsed5eMonsterBasicInfoSchema = z.object({
   skills: z
     .array(
       z.object({
-        name: z.enum([
-          'Strength',
-          'Athletics',
-          'Dexterity',
-          'Acrobatics',
-          'Sleight of Hand',
-          'Stealth',
-          'Intelligence',
-          'Arcana',
-          'History',
-          'Investigation',
-          'Nature',
-          'Religion',
-          'Wisdom',
-          'Animal Handling',
-          'Insight',
-          'Medicine',
-          'Perception',
-          'Survival',
-          'Charisma',
-          'Deception',
-          'Intimidation',
-          'Performance',
-          'Persuasion',
-        ]),
+        name: SkillEnumSchema,
         modifier: z.string().describe('eg. 3, -1, etc'),
       }),
     )
     .describe('array of skills proficiencies the monster has, usually labeled "skills"'),
   languages: z.array(z.string()).describe('array of languages the monster can speak'),
   race: z.string().describe('Only if applicable'),
-  size: z.enum(['Tiny', 'Small', 'Medium', 'Large', 'Huge', 'Gargantuan']),
-  // TODO - make this enum better
+  size: SizeEnumSchema,
   type: MonsterTypeEnumSchema,
   subtype: z.string(),
   isASwarm: z.boolean(),
@@ -86,14 +64,6 @@ export const Parsed5eMonsterBasicInfoSchema = z.object({
   damageResistances: z.array(z.string()),
   damageVulnerabilities: z.array(z.string()),
   conditionImmunities: z.array(z.string()),
-  // type: z.object({
-  //   type: z.object({
-  //     value: z.string().describe('type of monster, e.g. "elemental"'),
-  //     subtype: z.string().describe('subtype of monster, e.g. "swarm of insects"'),
-  //     swarm: z.string().describe(hc('')),
-  //     custom: z.string().describe(hc('')),
-  //   }),
-  // }),
   challengeRating: z.number().describe('challenge rating - whole number from 1 to 20 or fraction between 0 and 1'),
 });
 

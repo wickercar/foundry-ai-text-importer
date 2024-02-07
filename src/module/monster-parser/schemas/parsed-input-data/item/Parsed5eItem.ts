@@ -9,8 +9,6 @@ import { ItemTypeEnumSchema } from '../../enums/ItemType';
  */
 export const Parsed5eItemSchema = z.object({
   name: z.string(),
-  // type: ItemTypeEnumSchema, // TODO - basing off of ActionType for now
-  // source: z.string(),
   activation: z.object({
     type: ActivationTypeEnumSchema,
     cost: z.number(),
@@ -24,7 +22,6 @@ export const Parsed5eItemSchema = z.object({
     })
     .describe('Duration - empty unless a duration is explicitly specified')
     .optional(),
-  // cover: z.number().nullable(), // TODO - put back in, don't have any examples right now
   // TODO - chunk range together
   target: z
     .object({
@@ -44,7 +41,7 @@ export const Parsed5eItemSchema = z.object({
       value: z.number().nullable().describe('the range of the item (e.g. for "60/120 feet" the value is 60)'),
       long: z
         .number()
-        .nullable()
+        .optional()
         .describe('the long range of the item (e.g. for "60/120 feet" the value is 120). Exclude if no long range'),
       units: z.string().describe('the units of the range (e.g. for "60/120 feet" the units are "ft")'),
     })

@@ -30,6 +30,17 @@ const registerExampleItemTests = (context) => {
       console.log('foundItem', foundItem);
       assert.ok(foundItem?.name === 'Lightning Breath');
     });
+    it('Finds all spellcasting items in compendium', async function () {
+      const innateSpellcasting = await foundryItemCompendia.findAllItemsWithName('Innate Spellcasting');
+      const spellCasting = await foundryItemCompendia.findAllItemsWithName('Spellcasting');
+      const items = [...innateSpellcasting, ...spellCasting];
+      console.log('spellcasting items:', items);
+      console.log(
+        'spellcasting items descriptions: ',
+        items.map((item) => item.system.description.value),
+      );
+      assert.ok(items.length > 0);
+    });
   });
 };
 

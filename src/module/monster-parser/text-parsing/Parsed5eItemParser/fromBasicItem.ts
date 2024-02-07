@@ -2,6 +2,7 @@ import FoundryItemCompendia from '../../foundry-compendia/FoundryItemCompendia';
 import { Parsed5eMonsterBasicItem } from '../../schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';
 import Parsed5eItemParser from './Parsed5eItemParser';
 import { Parsed5eItem } from '../../schemas/parsed-input-data/item/Parsed5eItem';
+import { Parsed5eSpellcastingItem } from '../../schemas/parsed-input-data/spellcasting/Parsed5eSpellcastingItem';
 
 // this is very rudimentary for now, just generating a blank item with the same name and description, using an existing item as a template if found
 export const genParsed5eItemFromBasicItem = async (
