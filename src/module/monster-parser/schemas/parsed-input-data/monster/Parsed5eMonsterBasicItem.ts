@@ -1,11 +1,11 @@
 import { z } from 'zod';
 import { ActivationTypeEnumSchema } from '../../enums/ActivationType';
-import { BasicItemTypeSchema } from '../../enums/BasicItemType';
+import { BasicItemCategorySchema } from '../../enums/BasicItemCategory';
 
 export const Parsed5eMonsterBasicItemSchema = z.object({
   name: z.string().describe('usually precedes the text (e.g. for input "Bite. The monster makes a bite" => "Bite"'),
   text: z.string(),
-  type: BasicItemTypeSchema,
+  type: BasicItemCategorySchema,
   // .describe(
   //   'The type of item according to the section header. If there is no header, it is a special trait',
   // ),

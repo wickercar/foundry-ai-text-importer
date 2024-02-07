@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 // This represents the sections under the stat block, such as Actions, Legendary Actions, and Special Traits
-export const BasicItemTypeSchema = z.enum([
+export const BasicItemCategorySchema = z.enum([
   'specialTrait',
   'action',
   'reaction',
@@ -11,4 +11,4 @@ export const BasicItemTypeSchema = z.enum([
   'about',
 ]);
 
-export type BasicItemType = z.infer<typeof BasicItemTypeSchema>;
+export type BasicItemCategory = z.infer<typeof BasicItemCategorySchema>;

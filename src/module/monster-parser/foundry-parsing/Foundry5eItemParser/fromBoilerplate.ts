@@ -1,5 +1,5 @@
 import { ActivationType } from '../../schemas/enums/ActivationType';
-import { BasicItemType } from '../../schemas/enums/BasicItemType';
+import { BasicItemCategory } from '../../schemas/enums/BasicItemCategory';
 import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/Foundry5eItem';
 import { Parsed5eMonsterBasicItem } from '../../schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';
 
@@ -10,7 +10,7 @@ export const genCustomBoilerplateFoundry5eItemFromBasicItem = ({
   type,
 }: Parsed5eMonsterBasicItem): Foundry5eItem => {
   // TODO - this is boilerplate for now, just replacing name and description with name and text. Will want to make it a just holding it here to finish the foundry import piece
-  const activationType = activationTypeFromBasicItemType(type);
+  const activationType = activationTypeFromBasicItemCategory(type);
 
   const item = Foundry5eItemSchema.parse({
     name,
@@ -87,7 +87,7 @@ export const genCustomBoilerplateFoundry5eItemFromBasicItem = ({
   return item;
 };
 
-const activationTypeFromBasicItemType = (type: BasicItemType): ActivationType => {
+const activationTypeFromBasicItemCategory = (type: BasicItemCategory): ActivationType => {
   switch (type) {
     case 'action':
       return 'action';
