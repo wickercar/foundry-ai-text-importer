@@ -10,6 +10,9 @@ import Foundry5eItemFormatter from './foundry-parsing/Foundry5eItemFormatter';
 import TaskTracker from '../performanceUtils/TaskTracker';
 import { Parsed5eItem } from './schemas/parsed-input-data/item/Parsed5eItem';
 import { notUndefined } from './utils';
+import Parsed5eSpellcastingItemParser from './text-parsing/Parsed5eSpellcastingItemParser';
+import { Parsed5eSpellcastingItem } from './schemas/parsed-input-data/spellcasting/Parsed5eSpellcastingItem';
+import { Parsed5eMonsterBasicItem } from './schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';
 
 type MonsterTextBlock5eParsingStrategy =
   | 'ONE_CALL'
@@ -67,9 +70,20 @@ const parseItemWithParsed5eItemSchemaStrategy = async (text: string, inChunks: b
     basicItemsPromise,
   );
   const basicItems = await basicItemsPromise;
+
+  // Spellcasting Items (parse spells separately):
+  const spellcastingItem = basicItems.find(
+    (item) => item.name === 'Innate Spellcasting' || item.name === 'Spellcasting',
+  );
+  const foundrySpellItemsPromise = spellcastingItem
+    ? Foundry5eItemParser.fromBasicSpellcastingItem(spellcastingItem)
+    : undefined;
+
   const parsedItemsPromise = Parsed5eItemParser.fromBasicItemList(basicItems, inChunks);
-  const parsedItems: Array<Parsed5eItem> = await parsedItemsPromise;
-  const foundryItems = parsedItems.map((item) => Foundry5eItemFormatter.format(item));
+  const parsedItems: Array<Parsed5eItem> = await parsedItemsPromise; //
+  const foundryNonSpellItems = parsedItems.map((item) => Foundry5eItemFormatter.format(item));
+  const foundrySpellItems = foundrySpellItemsPromise ? await foundrySpellItemsPromise : [];
+  const foundryItems = foundryNonSpellItems.concat(foundrySpellItems);
   console.log('Parsed Foundry Items: ', foundryItems);
   const basicInfo = await basicInfoPromise;
   return Foundry5eMonsterFormatter.format(basicInfo, foundryItems);

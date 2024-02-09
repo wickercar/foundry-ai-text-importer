@@ -107,8 +107,11 @@ export default class Foundry5eItemFormatter implements Foundry5eItem {
   }
 
   get range(): Foundry5eItem['system']['range'] {
-    const rangeParsed = Foundry5eRangeSchema.safeParse(this.parsedItem.range);
-    return rangeParsed.success ? rangeParsed.data : { value: null, long: null, units: '' };
+    return {
+      value: this.parsedItem?.range?.value || null,
+      long: this.parsedItem?.range?.long || null,
+      units: this.parsedItem?.range?.units || '',
+    };
   }
 
   get uses(): Foundry5eItem['system']['uses'] {

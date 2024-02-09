@@ -4,7 +4,7 @@ import { ActivationTypeEnumSchema } from '../../enums/ActivationType';
 import { FoundryActionTypeEnumSchema } from '../../enums/foundry-specific/FoundryActionType';
 import { SavingThrowAbilitiesEnumSchema } from '../../enums/SavingThrowAbilities';
 import { Foundry5eItemDurationSchema } from './Foundry5eItemDuration';
-import { ItemTypeEnumSchema } from '../../enums/ItemType';
+import { FoundryItemTypeEnumSchema } from '../../enums/foundry-specific/FoundryItemType';
 
 const PriceSchema = z.object({
   value: z.number().default(0),
@@ -14,7 +14,7 @@ const PriceSchema = z.object({
 export const Foundry5eItemSchema = z.object({
   _id: z.string().optional(),
   name: z.string(),
-  type: ItemTypeEnumSchema, // these should be the types that apply to monsters but more for PCs
+  type: FoundryItemTypeEnumSchema, // these should be the types that apply to monsters but more for PCs
   img: z.string(),
   /** Optional fields, consider taking off **/
   effects: z.array(z.string()).optional().default([]),
