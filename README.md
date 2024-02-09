@@ -3,9 +3,9 @@
 Import any monster stat block right into FoundryVTT using GPT!
 
 ## Video Demo
-Here is a short video demo where I import an [Infernal Centaur](https://www.5esrd.com/database/creature/infernal-centaur/) by copy-pasting it from 5esrd.com
+Here is a short video demo importing a Couatling by copy-pasting text from D&D Beyond (but you can import from any stat block you want!)
 
-[![AI Monster Importer Demo]([https://img.youtube.com/vi/StTqXEQ2l-Y/0.jpg](https://i9.ytimg.com/vi_webp/W7DYHjjcxPc/mq3.webp?sqp=CPT6iq4G-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYACzgWKAgwIABABGH8gEygVMA8=&rs=AOn4CLA6FBuEBGOA6mNXGAh1Rtgtjl4jEA))](https://youtu.be/W7DYHjjcxPc "AI Monster Importer Demo")
+[![AI Monster Importer Demo]([https://img.youtube.com/vi/StTqXEQ2l-Y/0.jpg](https://i9.ytimg.com/vi_webp/W7DYHjjcxPc/mq3.webp?sqp=CPT6iq4G-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYACzgWKAgwIABABGH8gEygVMA8=&rs=AOn4CLA6FBuEBGOA6mNXGAh1Rtgtjl4jEA))](https://youtu.be/FTbdSSAQR28?si=7x1o8a7-kt7Maogq "AI Monster Importer Demo")
 
 ## Usage
 - Download and install this module via the [FoundryVTT Add-on Module Marketplace](https://foundryvtt.com/packages/modules "FoundryVTT Modules")
