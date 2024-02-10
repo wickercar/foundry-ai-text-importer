@@ -5,7 +5,7 @@ import { Parsed5eLLMMonster } from './schemas/parsed-input-data/monster/Parsed5e
 import Foundry5eItemParser from './foundry-parsing/Foundry5eItemParser/Foundry5eItemParser';
 import { Foundry5eItem } from './schemas/foundry/item/Foundry5eItem';
 import Foundry5eMonsterFormatter from './foundry-parsing/Foundry5eMonsterFormatter';
-import Parsed5eItemParser from './text-parsing/Parsed5eItemParser/Parsed5eItemParser';
+import Parsed5eItemParser from './text-parsing/Parsed5eItemParser';
 import Foundry5eItemFormatter from './foundry-parsing/Foundry5eItemFormatter';
 import TaskTracker from '../performanceUtils/TaskTracker';
 import { Parsed5eItem } from './schemas/parsed-input-data/item/Parsed5eItem';
