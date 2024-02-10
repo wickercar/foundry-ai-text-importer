@@ -1,11 +1,12 @@
-/* eslint-disable jest/no-export, jest/expect-expect  */
-import { create5eLLMMonsterOutputParser } from '../monster-parser/text-parsing/MonsterTextBlock5eParser/parseToBasicMonster';
+import { StructuredOutputParser } from 'langchain/output_parsers';
+import { Parsed5eLLMMonsterSchema } from '../monster-parser/schemas/parsed-input-data/monster/Parsed5eMonster';
 
+/* eslint-disable jest/no-export, jest/expect-expect  */
 const registerFormatInstructionsTests = (context) => {
   const { describe, it, assert } = context;
   describe('Testing the format instructions', function () {
     it('Generates an output parser for the initial call and prints the format instructions for examination', async function () {
-      const outputParser = create5eLLMMonsterOutputParser();
+      const outputParser = StructuredOutputParser.fromZodSchema(Parsed5eLLMMonsterSchema);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore this parameter exists
       const formatInstructions = outputParser.getFormatInstructions();

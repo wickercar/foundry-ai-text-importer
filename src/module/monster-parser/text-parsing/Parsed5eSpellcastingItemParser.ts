@@ -7,34 +7,20 @@ import {
   Parsed5eSpellcastingItem,
   Parsed5eSpellcastingItemSchema,
 } from '../schemas/parsed-input-data/spellcasting/Parsed5eSpellcastingItem';
+import askLLM from '../llm/askLLM';
 
 export default class Parsed5eSpellcastingItemParser {
   static fromText = async (text: string): Promise<Parsed5eSpellcastingItem> => {
-    const prompt = PromptTemplate.fromTemplate(`
-      From the provided text, parse the indicated information about the spells listed
-  
+    return askLLM<{ spellcastingText: string }, Parsed5eSpellcastingItem>(
+      `From the provided text, parse the indicated information about the spells listed
+
       TEXT TO PARSE:
       {spellcastingText}
-  
-      SCHEMA AND FORMAT INSTRUCTIONS:
-      {formatInstructions}
-    `);
-    // TODO - move somewhere
-    const outputParser = StructuredOutputParser.fromZodSchema(Parsed5eSpellcastingItemSchema);
-
-    const llm = OpenAILLM();
-
-    const output = (
-      await new LLMChain({
-        llm,
-        prompt,
-        outputParser,
-      }).invoke({
-        formatInstructions: outputParser.getFormatInstructions(),
+      `,
+      Parsed5eSpellcastingItemSchema,
+      {
         spellcastingText: text,
-      })
-    ).text;
-    console.log('spellcasting output: ', output);
-    return output as Parsed5eSpellcastingItem;
+      },
+    );
   };
 }

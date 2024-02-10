@@ -6,11 +6,11 @@ import {
 } from '../../schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';
 import { LLMChain } from 'langchain/chains';
 import { StructuredOutputParser } from 'langchain/output_parsers';
+import askLLM from '../../llm/askLLM';
 
 export const parse5eMonsterTextBlockToBasicItems = async (text: string): Promise<Parsed5eMonsterBasicItemArray> => {
-  const llm = OpenAILLM();
-  const prompt = PromptTemplate.fromTemplate(`
-    Parse the provided monster text into an array of the monster's "basic items" as described below
+  return askLLM<{ monsterText: string }, Parsed5eMonsterBasicItemArray>(
+    `Parse the provided monster text into an array of the monster's "basic items" as described below
     Be sure to skip all the normal monster stats and just parse the "basic items" (like actions, reactions, etc.). 
     Basic Items come in the later part of the text block.
 
@@ -19,20 +19,10 @@ export const parse5eMonsterTextBlockToBasicItems = async (text: string): Promise
 
     SCHEMA AND FORMAT INSTRUCTIONS:
     {formatInstructions}
-  `);
-
-  const outputParser = StructuredOutputParser.fromZodSchema(Parsed5eMonsterBasicItemArraySchema);
-
-  const output = (
-    await new LLMChain({
-      llm,
-      prompt,
-      outputParser,
-    }).invoke({
-      formatInstructions: outputParser.getFormatInstructions(),
+  `,
+    Parsed5eMonsterBasicItemArraySchema,
+    {
       monsterText: text,
-    })
-  ).text;
-
-  return output as Parsed5eMonsterBasicItemArray;
+    },
+  );
 };

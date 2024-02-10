@@ -4,14 +4,14 @@ import { Foundry5eItem, Foundry5eItemSchema } from '../../schemas/foundry/item/F
 import { StructuredOutputParser } from 'langchain/output_parsers';
 import { LLMChain } from 'langchain/chains';
 import { Parsed5eMonsterBasicItem } from '../../schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';
+import askLLM from '../../llm/askLLM';
 
 export const genFoundry5eItemFromExample = async (
   basicItem: Parsed5eMonsterBasicItem,
   exampleItem: Foundry5eItem,
 ): Promise<Foundry5eItem> => {
-  const llm = OpenAILLM();
-  const prompt = PromptTemplate.fromTemplate(`
-    Parse the provided item text into the json schema specified below. The outputted fields should have the same values as the base item provided unless the itemText suggests a clear difference.
+  return askLLM<{ itemName: string; itemText: string; exampleItem: Foundry5eItem }, Foundry5eItem>(
+    `Parse the provided item text into the json schema specified below. The outputted fields should have the same values as the base item provided unless the itemText suggests a clear difference.
 
     TEXT TO PARSE:
     {itemName}
@@ -22,34 +22,20 @@ export const genFoundry5eItemFromExample = async (
 
     SCHEMA AND FORMAT INSTRUCTIONS:
     {formatInstructions}
-  `);
-
-  const outputParser = StructuredOutputParser.fromZodSchema(Foundry5eItemSchema);
-
-  const output = (
-    await new LLMChain({
-      llm,
-      prompt,
-      outputParser,
-    }).invoke({
-      formatInstructions: outputParser.getFormatInstructions(),
+    `,
+    Foundry5eItemSchema,
+    {
       itemName: basicItem.name,
       itemText: basicItem.text,
       exampleItem: exampleItem,
-    })
-  ).text;
-
-  // Remove fields that cause issues
-  delete output._id;
-  output.effects = [];
-
-  // Passthrough fields
-  output.img = exampleItem.img;
-
-  output.flags = exampleItem.flags;
-  // TEMP - flag which items are from examples
-  output.system.description.value += `\n\n${exampleItem.name} was generated from an example`;
-
-  console.log('item: ', output);
-  return output;
+    },
+    {
+      overrides: {
+        img: exampleItem.img,
+        flags: exampleItem.flags,
+        effects: [],
+      },
+      deletions: ['_id'],
+    },
+  );
 };
