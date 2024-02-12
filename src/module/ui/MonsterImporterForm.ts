@@ -1,6 +1,8 @@
 import { OpenAI } from 'langchain/llms/openai';
 import genFoundry5eMonsterActorFromTextBlock from '../genFoundryActorFromMonsterTextBlock';
-import OpenAIAPIKeyStorage from '../monster-parser/settings/openai-api-key/OpenAIAPIKeyStorage';
+import OpenAIAPIKeyStorage, {
+  APIKeyValidationStatus,
+} from '../monster-parser/settings/openai-api-key/OpenAIAPIKeyStorage';
 import OpenAIAPIKeyForm from '../monster-parser/settings/openai-api-key/OpenAIAPIKeyForm';
 import foundryMonsterCompendia, {
   DEFAULT_MONSTER_COMPENDIUM_NAME,
@@ -34,7 +36,8 @@ const RERENDER_DURING_LOAD_INTERVAL_MS = 1000;
 class MonsterImporterForm extends FormApplication {
   userText: string;
   isLoading = false;
-  isAPIKeyValid = true;
+  apiKeyValidationStatus: APIKeyValidationStatus = 'VALID'; // Initialize to VALID but validate in the background
+  doesAPIKeyHaveProperModelAccess = true;
   showProgressView = false;
   // one-timevalidators
   hasValidatedAPIKey = false;
@@ -137,13 +140,7 @@ class MonsterImporterForm extends FormApplication {
   }
 
   async checkAPIKey(): Promise<void> {
-    const isValid = await OpenAIAPIKeyStorage.isStoredApiKeyValid();
-    if (!isValid) {
-      console.error('Invalid API Key');
-      this.isAPIKeyValid = false;
-    } else {
-      this.isAPIKeyValid = true;
-    }
+    this.apiKeyValidationStatus = await OpenAIAPIKeyStorage.getStoredApiKeyValidationStatus();
   }
 
   async getData(): Promise<any> {
@@ -167,7 +164,8 @@ class MonsterImporterForm extends FormApplication {
     const data = {
       ...superData,
       title: this.options.title,
-      invalidAPIKey: !this.isAPIKeyValid,
+      invalidApiKey: this.apiKeyValidationStatus === 'VALID',
+      apiKeyHasNoModelAccess: this.apiKeyValidationStatus === 'NO_MODEL_ACCESS',
       isLoading: this.isLoading,
       showProgressView: this.showProgressView,
       // isLoading: true, // TEMP - harcoding to true to test loading spinner

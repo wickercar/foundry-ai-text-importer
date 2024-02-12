@@ -1,4 +1,6 @@
 const VALIDATION_API_ENDPOINT = 'https://api.openai.com/v1/models';
+const VALID_MODULE_CONTAINS = 'gpt-4';
+export type APIKeyValidationStatus = 'VALID' | 'NO_MODEL_ACCESS' | 'INVALID_KEY';
 
 export default class OpenAIAPIKeyStorage {
   static setApiKey(apiKey: string) {
@@ -9,10 +11,10 @@ export default class OpenAIAPIKeyStorage {
     return localStorage.getItem('openai-api-key') || '';
   }
 
-  static async isStoredApiKeyValid(): Promise<boolean> {
+  static async getStoredApiKeyValidationStatus(): Promise<APIKeyValidationStatus> {
     const apiKey = OpenAIAPIKeyStorage.getApiKey();
     if (apiKey === '') {
-      return false;
+      return 'INVALID_KEY';
     }
     // Validate the key against the backend
     const response = await fetch(VALIDATION_API_ENDPOINT, {
@@ -23,9 +25,11 @@ export default class OpenAIAPIKeyStorage {
       },
     });
     if (response.status === 200) {
-      return true;
+      const models = await response.json();
+      if (models.find((model) => model.id.includes(VALID_MODULE_CONTAINS))) {
+        return 'VALID';
+      } else return 'NO_MODEL_ACCESS';
     }
-    console.error('OpenAI API Key validation failed: ', response.status, response.statusText);
-    return false;
+    return 'INVALID_KEY';
   }
 }

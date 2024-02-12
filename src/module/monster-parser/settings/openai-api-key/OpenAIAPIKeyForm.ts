@@ -26,12 +26,13 @@ export default class OpenAIAPIKeyForm extends FormApplication {
   /** @override */
   async getData(options): Promise<any> {
     console.log('getData in key form: ', options);
-    const isValid = await OpenAIAPIKeyStorage.isStoredApiKeyValid();
-    if (isValid) this.onValidated();
+    const validationStatus = await OpenAIAPIKeyStorage.getStoredApiKeyValidationStatus();
+    if (validationStatus === 'VALID') this.onValidated();
     return {
       // TODO - add non-localStorage option
       apiKey: OpenAIAPIKeyStorage.getApiKey(),
-      isValid,
+      apiKeyIsValid: validationStatus === 'VALID',
+      apiKeyHasNoModelAccess: validationStatus === 'NO_MODEL_ACCESS',
     };
   }
 
