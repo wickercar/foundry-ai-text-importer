@@ -5,6 +5,7 @@
   "version": "1.0.4",
   "compatibility": {
     "minimum": 11,
+    "maximum": 12,
     "verified": "11.313"
   },
   "relationships": {
