@@ -1,5 +1,5 @@
 import { Foundry5eMonster } from './schemas/foundry/monster/Foundry5eMonster';
-import MonsterTextBlock5eParser from './text-parsing/MonsterTextBlock5eParser/MonsterTextBlock5eParser';
+import MonsterTextBlock5eParser from './text-parsing/MonsterTextBlock5eParser';
 import { Parsed5eLLMMonster } from './schemas/parsed-input-data/monster/Parsed5eMonster';
 import Foundry5eItemParser from './foundry-parsing/Foundry5eItemParser';
 import { Foundry5eItem } from './schemas/foundry/item/Foundry5eItem';
