@@ -2,10 +2,25 @@
 
 Import any monster stat block right into FoundryVTT using GPT!
 
-## Video Demo
-Here is a short video demo importing a Couatling by copy-pasting text from D&D Beyond (but you can import from any stat block you want!)
+*DnD5e and GPT-4 support only for now, more systems and LLMs to come!*
 
-[![AI Monster Importer Demo]([https://img.youtube.com/vi/StTqXEQ2l-Y/0.jpg](https://i9.ytimg.com/vi_webp/W7DYHjjcxPc/mq3.webp?sqp=CPT6iq4G-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYACzgWKAgwIABABGH8gEygVMA8=&rs=AOn4CLA6FBuEBGOA6mNXGAh1Rtgtjl4jEA))](https://youtu.be/FTbdSSAQR28?si=7x1o8a7-kt7Maogq "AI Monster Importer Demo")
+## Video Demo
+Here is a [short video demo](https://www.youtube.com/watch?v=FTbdSSAQR28&ab_channel=WillGregoire) importing a Couatling by copy-pasting text from D&D Beyond (but you can import from any stat block you want!)
+
+[![AI Monster Importer Demo](https://i9.ytimg.com/vi_webp/FTbdSSAQR28/mq1.webp?sqp=CPz9r64G-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYACzgWKAgwIABABGH8gEygVMA8=&rs=AOn4CLCp8JNbSRw9av1rLrRlEpwBGxpPzw)](https://www.youtube.com/watch?v=FTbdSSAQR28&ab_channel=WillGregoire)
+
+## Prerequisites
+
+**Subscribe to an OpenAI plan with GPT-4 access (Required)**
+Sign up for a plan on the [OpenAI Website](https://platform.openai.com/signup)
+
+*This module currently uses gpt-4-turbo-preview to power its text content parsing. Models that are available through the free plan (i.e. gpt-3.5-turbo) after testing do not provide accurate results. Support for other LLM providers, including Ollama, is in development.*
+
+
+**Import the DnD 5e SRD (Recommended but not necessary)**
+The importer uses your existing compendium monsters/items for spells, item examples and some assets.
+- Option 1 - If you're using a late enough version, do this through FoundryVTT's provided D&D content
+- Option 2 - Use [D&D Beyond Importer for Foundry VTT](https://github.com/MrPrimate/ddb-importer) to import all the free SRD content on D&D Beyond
 
 ## Usage
 - Download and install this module via the [FoundryVTT Add-on Module Marketplace](https://foundryvtt.com/packages/modules "FoundryVTT Modules")
@@ -13,9 +28,10 @@ Here is a short video demo importing a Couatling by copy-pasting text from D&D B
 - (Do this once) You will be prompted for your OpenAI API key, enter it and click "Save and Validate"
 - Copy-paste a monster text block into the box and click "Submit"
 
-Thats it!
+**That's it!**
 
 - After parsing your monster, the actor sheet will pop up and display the goods.
 - You can select a compendium to send your monsters to - a default one will be created if you don't!
 - While parsing, you'll see a breakdown of the different processes as they start and end.
 - Click "Import Another" and keep going!
+
