@@ -1,18 +1,13 @@
 import { Foundry5eMonster } from './schemas/foundry/monster/Foundry5eMonster';
-import genFoundry5eMonster from './foundry-parsing/Foundry5eMonsterFormatter';
 import MonsterTextBlock5eParser from './text-parsing/MonsterTextBlock5eParser/MonsterTextBlock5eParser';
 import { Parsed5eLLMMonster } from './schemas/parsed-input-data/monster/Parsed5eMonster';
-import Foundry5eItemParser from './foundry-parsing/Foundry5eItemParser/Foundry5eItemParser';
+import Foundry5eItemParser from './foundry-parsing/Foundry5eItemParser';
 import { Foundry5eItem } from './schemas/foundry/item/Foundry5eItem';
 import Foundry5eMonsterFormatter from './foundry-parsing/Foundry5eMonsterFormatter';
 import Parsed5eItemParser from './text-parsing/Parsed5eItemParser';
-import Foundry5eItemFormatter from './foundry-parsing/Foundry5eItemFormatter';
 import TaskTracker from '../performanceUtils/TaskTracker';
 import { Parsed5eItem } from './schemas/parsed-input-data/item/Parsed5eItem';
 import { notUndefined } from './utils';
-import Parsed5eSpellcastingItemParser from './text-parsing/Parsed5eSpellcastingItemParser';
-import { Parsed5eSpellcastingItem } from './schemas/parsed-input-data/spellcasting/Parsed5eSpellcastingItem';
-import { Parsed5eMonsterBasicItem } from './schemas/parsed-input-data/monster/Parsed5eMonsterBasicItem';
 
 type MonsterTextBlock5eParsingStrategy =
   | 'ONE_CALL'
@@ -81,7 +76,7 @@ const parseItemWithParsed5eItemSchemaStrategy = async (text: string, inChunks: b
 
   const parsedItemsPromise = Parsed5eItemParser.fromBasicItemList(basicItems, inChunks);
   const parsedItems: Array<Parsed5eItem> = await parsedItemsPromise; //
-  const foundryNonSpellItems = parsedItems.map((item) => Foundry5eItemFormatter.format(item));
+  const foundryNonSpellItems = parsedItems.map((item) => Foundry5eItemParser.fromParsed5eItem(item));
   const foundrySpellItems = foundrySpellItemsPromise ? await foundrySpellItemsPromise : [];
   const foundryItems = foundryNonSpellItems.concat(foundrySpellItems);
   console.log('Parsed Foundry Items: ', foundryItems);

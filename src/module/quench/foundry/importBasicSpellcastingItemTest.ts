@@ -1,4 +1,4 @@
-import Foundry5eItemParser from '../../monster-parser/foundry-parsing/Foundry5eItemParser/Foundry5eItemParser';
+import Foundry5eItemParser from '../../monster-parser/foundry-parsing/Foundry5eItemParser';
 import { Foundry5eItem } from '../../monster-parser/schemas/foundry/item/Foundry5eItem';
 import { Parsed5eSpellcastingItem } from '../../monster-parser/schemas/parsed-input-data/spellcasting/Parsed5eSpellcastingItem';
 
