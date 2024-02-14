@@ -35,3 +35,13 @@ The importer uses your existing compendium monsters/items for spells, item examp
 - While parsing, you'll see a breakdown of the different processes as they start and end.
 - Click "Import Another" and keep going!
 
+## The Future
+There is a lot to be done here in the way of optimization and extending functionality, we're just getting started!
+
+- Leverage more advanced LLMs as they come
+- Prompt optimization
+- Support other Systems
+...and more
+
+## Contact
+If you're interested in getting involved or talking about the project, let me know! Find me on the [FoundryVTT Discord](https://discord.com/invite/foundryvtt) at wickerplane.
