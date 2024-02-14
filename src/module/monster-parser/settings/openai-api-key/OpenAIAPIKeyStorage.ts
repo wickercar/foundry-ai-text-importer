@@ -1,5 +1,5 @@
 const VALIDATION_API_ENDPOINT = 'https://api.openai.com/v1/models';
-const VALID_MODULE_CONTAINS = 'gpt-4';
+const VALID_MODEL_CONTAINS = 'gpt-4';
 export type APIKeyValidationStatus = 'VALID' | 'NO_MODEL_ACCESS' | 'INVALID_KEY';
 
 export default class OpenAIAPIKeyStorage {
@@ -26,7 +26,7 @@ export default class OpenAIAPIKeyStorage {
     });
     if (response.status === 200) {
       const models = await response.json();
-      if (models.find((model) => model.id.includes(VALID_MODULE_CONTAINS))) {
+      if (!!models?.data?.find((model) => model.id.includes(VALID_MODEL_CONTAINS))) {
         return 'VALID';
       } else return 'NO_MODEL_ACCESS';
     }
