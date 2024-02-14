@@ -140,7 +140,11 @@ class MonsterImporterForm extends FormApplication {
   }
 
   async checkAPIKey(): Promise<void> {
+    const formerApiKeyValidationStatus = this.apiKeyValidationStatus;
     this.apiKeyValidationStatus = await OpenAIAPIKeyStorage.getStoredApiKeyValidationStatus();
+    if (formerApiKeyValidationStatus !== this.apiKeyValidationStatus) {
+      this.render();
+    }
   }
 
   async getData(): Promise<any> {
@@ -164,7 +168,7 @@ class MonsterImporterForm extends FormApplication {
     const data = {
       ...superData,
       title: this.options.title,
-      invalidApiKey: this.apiKeyValidationStatus === 'VALID',
+      apiKeyIsInvalid: this.apiKeyValidationStatus === 'INVALID_KEY',
       apiKeyHasNoModelAccess: this.apiKeyValidationStatus === 'NO_MODEL_ACCESS',
       isLoading: this.isLoading,
       showProgressView: this.showProgressView,
