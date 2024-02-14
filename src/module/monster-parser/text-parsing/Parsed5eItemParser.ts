@@ -23,7 +23,7 @@ export default class Parsed5eItemParser {
     // TODO - example items support in this new paradigm (look at Foundry5eItemParser, do that but convert to Parsed5eItem)
     // Option 2 - gen full new item from scratch
     try {
-      return Parsed5eItemParser.fromScratch(basicItem, inChunks, exampleFoundryItem?.img);
+      return await Parsed5eItemParser.fromScratch(basicItem, inChunks, exampleFoundryItem?.img);
     } catch (e) {
       console.error(`Failed to parse basic item ${basicItem} from scratch `);
       return undefined;
