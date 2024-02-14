@@ -12,7 +12,7 @@ async function createAndPushFoundryRelease() {
     method: "POST",
     body: JSON.stringify({
       "id": "llm-text-content-importer",
-      "dry-run": true,
+      "dry-run": false,
       "release": {
         "version": process.env.moduleVersion,
         "manifest": process.env.manifestUrl,
